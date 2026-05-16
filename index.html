@@ -1554,7 +1554,7 @@
   </div>
 
   <div class="section-header">
-    <span class="section-title">Esporta Dati</span>
+    <span class="section-title">Backup &amp; Ripristino</span>
     <div class="section-line"></div>
   </div>
 
@@ -1562,9 +1562,18 @@
     <div class="note-item">
       <div style="flex:1">
         <div style="font-size:14px;color:var(--text-primary);margin-bottom:6px">Esporta JSON</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Scarica tutti i tuoi progressi in formato JSON per backup o trasferimento.</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Scarica tutti i tuoi progressi in formato JSON per backup o trasferimento tra dispositivi.</div>
       </div>
       <button onclick="exportData()" style="background:var(--amber);border:none;color:var(--bg-void);font-family:var(--font-title);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;cursor:pointer;border-radius:2px;white-space:nowrap">Esporta</button>
+    </div>
+    <div class="note-item">
+      <div style="flex:1">
+        <div style="font-size:14px;color:var(--text-primary);margin-bottom:6px">Importa JSON</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Ripristina un backup precedente. I dati attuali verranno sostituiti.</div>
+        <input type="file" id="importJsonInput" accept=".json" style="display:none" onchange="importData(this)">
+        <div id="import-status" style="margin-top:8px;font-family:var(--font-mono);font-size:11px;color:var(--text-dim);min-height:16px"></div>
+      </div>
+      <button onclick="document.getElementById('importJsonInput').click()" style="background:none;border:1px solid var(--amber-dim);color:var(--amber-dim);font-family:var(--font-title);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:10px 20px;cursor:pointer;border-radius:2px;white-space:nowrap;transition:all 0.15s" onmouseover="this.style.borderColor='var(--amber)';this.style.color='var(--amber)'" onmouseout="this.style.borderColor='var(--amber-dim)';this.style.color='var(--amber-dim)'">Importa</button>
     </div>
   </div>
 
@@ -2450,6 +2459,44 @@ function exportData() {
   a.download = 'building_vikings_'+today()+'.json';
   a.click();
   showToast('✓ Dati esportati');
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('import-status');
+  statusEl.textContent = 'Lettura file…';
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      // Accept both bare state and wrapped {program, exportDate, data} format
+      const imported = parsed.data || parsed;
+      // Basic validation
+      if (typeof imported !== 'object' || imported === null) throw new Error('Formato non valido');
+      if (!imported.logs && !imported.completedDays) throw new Error('Il file non sembra un backup di Building Vikings');
+      // Merge: preserve keys that exist in defaultState
+      const fresh = defaultState();
+      state = { ...fresh, ...imported };
+      saveState();
+      statusEl.style.color = 'var(--amber)';
+      statusEl.textContent = '✓ Importato: ' + (imported.completedDays?.length || 0) + ' sessioni, ' + Object.keys(imported.logs || {}).length + ' esercizi loggati';
+      showToast('✓ Backup ripristinato');
+      renderDashboard();
+    } catch(err) {
+      statusEl.style.color = 'var(--red-danger)';
+      statusEl.textContent = '✗ Errore: ' + err.message;
+      showToast('✗ Importazione fallita');
+    }
+    // Reset input so same file can be re-selected
+    input.value = '';
+  };
+  reader.onerror = () => {
+    statusEl.style.color = 'var(--red-danger)';
+    statusEl.textContent = '✗ Impossibile leggere il file';
+    input.value = '';
+  };
+  reader.readAsText(file);
 }
 
 // ═══════════════════════════════════════════════════
