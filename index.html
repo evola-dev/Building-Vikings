@@ -1618,214 +1618,162 @@ const PROGRAM = {
       name: "Gambe / Spalle",
       emoji: "🦵",
       color: "session-a",
-      duration: "75–85 min",
+      duration: "58–62 min",
       warmup: {
         title: "Warm-Up — Vogatore + Mobilità",
-        time: "10 min totali",
+        time: "7 min totali",
         exercises: [
-          {name:"Vogatore", specs:"5 min a intensità moderata (pace costante, RPE 5)"},
-          {name:"Hip Circle + Leg Swing", specs:"2×10 per lato — mobilità anche/anca"},
-          {name:"Goblet Squat con KB", specs:"2×8 con 2s hold al bottom — carico leggero"},
-          {name:"Banded Pull-Through", specs:"2×15 — attivazione gluti"},
+          {name:"Vogatore", specs:"4 min a intensità moderata (RPE 5)"},
+          {name:"Hip Circle + Leg Swing", specs:"1×10 per lato — mobilità anca"},
+          {name:"Goblet Squat con KB", specs:"2×6 con 2s hold al bottom — carico leggero"},
         ]
       },
       blocks: [
         {
-          id:"A1", num:"BLOCCO 1", title:"Attivazione Gluti & Catena Post.", tag:"compound", objective:"Pre-attivare gluti e hamstring prima dei compound",
+          id:"A1", num:"BLOCCO 1", title:"Attivazione Gluti & Catena Post. — SS", tag:"superset",
+          objective:"Attivare gluti e hamstring — SS compatto, non un vero lavoro di forza · 3 round · Rest 60s dopo ogni round",
           exercises:[
-            {id:"A1a", letter:"1A", name:"Barbell Hip Thrust", sets:3, reps:"10", tut:"2s hold al top", rest:"60s", note:"Contrai i gluti al massimo nella fase isometrica"},
-            {id:"A1b", letter:"1B", name:"Barbell Good Morning", sets:3, reps:"10", tut:"3s eccentrica", rest:"60s", note:"Carico leggero-moderato. Schiena perfettamente neutra. Esercizio di attivazione non di forza massimale"},
+            {id:"A1a", letter:"1A", name:"Barbell Hip Thrust", sets:3, reps:"10", tut:"2s hold al top", rest:"→ 1B senza riposo", note:"Carico moderato. Contrai i gluti al massimo nella fase isometrica"},
+            {id:"A1b", letter:"1B", name:"Barbell Good Morning", sets:3, reps:"8", tut:"3s eccentrica", rest:"60s poi ripeti round", note:"Carico leggero, schiena neutra. Attivazione non forza massimale"},
           ]
         },
         {
-          id:"A2", num:"BLOCCO 2", title:"Quad Isolation (Pre-Fatigue)", tag:null, objective:"Pre-affaticare il quadricipite prima del compound principale",
+          id:"A2", num:"BLOCCO 2", title:"Quad Pre-Fatigue", tag:null,
+          objective:"Pre-affaticare il quadricipite prima dei compound",
           exercises:[
-            {id:"A2a", letter:"2", name:"Leg Extension Machine", sets:4, reps:"25 totali strutturate", tut:"10×3s neg → 10×2s hold top → 5 esplosive", rest:"60s", note:"Struttura ogni set: 10 reps 3s negative + 10 reps 2s hold al top + 5 reps esplosive = 25 totali"},
+            {id:"A2a", letter:"2", name:"Leg Extension Machine", sets:3, reps:"20 totali strutturate", tut:"8×3s neg + 8×2s hold top + 4 esplosive", rest:"45s", note:"Struttura ogni set: 8 reps 3s negative + 8 reps 2s hold al top + 4 reps esplosive = 20 totali"},
           ]
         },
         {
-          id:"A3", num:"BLOCCO 3", title:"Compound Legs — TRI-SET", tag:"triset", objective:"Massimo stress meccanico e metabolico sull'intero lower body — 4 round, rest 2:30 tra round",
+          id:"A3", num:"BLOCCO 3", title:"Compound Legs — TRI-SET", tag:"triset",
+          objective:"Stress meccanico e metabolico — quad, gluti, hamstring · 3 round · Rest 2 min tra i round",
           exercises:[
-            {id:"A3a", letter:"3A", name:"Leg Press", sets:4, reps:"20 totali", tut:"10×3s neg + 10 esplosive", rest:"→ 3B senza riposo", note:"Carico moderato-pesante. Mai a scapito della ROM completa"},
-            {id:"A3b", letter:"3B", name:"Pulse Walking Lunges con Manubri", sets:4, reps:"24 passi totali", tut:"1 pulse per passo", rest:"→ 3C senza riposo", note:"Mezzo affondo + affondo completo = 1 passo. Torso verticale, ginocchio anteriore non oltre la punta del piede"},
-            {id:"A3c", letter:"3C", name:"Goblet Squat con KB", sets:4, reps:"20", tut:"2s hold al bottom", rest:"2:30 poi ripeti il round", note:"Carico medio — focus sulla profondità e controllo eccentrico"},
+            {id:"A3a", letter:"3A", name:"Leg Press", sets:3, reps:"16 totali", tut:"8×3s neg + 8 esplosive", rest:"→ 3B senza riposo", note:"Carico moderato-pesante. ROM completa"},
+            {id:"A3b", letter:"3B", name:"Pulse Walking Lunges con Manubri", sets:3, reps:"20 passi totali", tut:"1 pulse per passo", rest:"→ 3C senza riposo", note:"Mezzo affondo + affondo completo = 1 passo. Torso verticale, ginocchio anteriore non oltre la punta del piede"},
+            {id:"A3c", letter:"3C", name:"Stiff Leg RDL con Manubri", sets:3, reps:"10", tut:"3s eccentrica", rest:"2 min poi ripeti il round", note:"Carico leggero — hamstring in allungamento. Non è un esercizio di forza in questo contesto"},
           ]
         },
         {
-          id:"A4", num:"BLOCCO 4", title:"Strength Squat", tag:"compound", objective:"Carico massimale, strength & hypertrophy integrate",
+          id:"A4", num:"BLOCCO 4", title:"Strength Squat", tag:"compound",
+          objective:"Carico massimale, strength & hypertrophy",
           exercises:[
-            {id:"A4a", letter:"4", name:"Safety Bar / Back Squat", sets:4, reps:"10", tut:"4s eccentrica + 2s hold al bottom", rest:"90s", note:"Carico pesante ma controllato (RPE 7-8). Progressione: Prima ondata stabilisci 10RM tecnico → Seconda +5% → Peak +5%"},
+            {id:"A4a", letter:"4", name:"Safety Bar Squat / Barbell Back Squat", sets:3, reps:"8", tut:"3s eccentrica + 1s hold al bottom", rest:"90s", note:"Carico pesante ma controllato (RPE 7–8). Prima ondata: stabilisci 8RM tecnico → Seconda +5% → Peak +5%"},
           ]
         },
         {
-          id:"A5", num:"BLOCCO 5", title:"Hamstring & Posterior Chain", tag:"compound", objective:"Sviluppo bilanciato della catena posteriore — ischio-crurali e gluti",
+          id:"A5", num:"BLOCCO 5", title:"Spalle", tag:null,
+          objective:"5 minuti di transizione dopo il blocco gambe, poi attacca spalle",
           exercises:[
-            {id:"A5a", letter:"5A", name:"Stiff Leg RDL con Bilanciere", sets:4, reps:"8", tut:"3s eccentrica", rest:"30s → vai a 5B", note:"Carico 40–60%. Senti lo stretch degli hamstring. Qualità prima del peso"},
-            {id:"A5b", letter:"5B", name:"Bulgarian Split Squat — Death Sets", sets:3, reps:"3 round × (8+DS+DS) per gamba", tut:"8s hold a parallelo + DS -20%×2", rest:"2 min tra round (dopo entrambe le gambe)", note:"3 round: 8 reps pesante + 8s hold → DS -20%: 8 reps + 8s hold → DS -20%: 8 reps + 8s hold → cambia gamba. Ispirato al protocollo 8×8 Get Huge Program"},
-          ]
-        },
-        {
-          id:"A6", num:"BLOCCO 6 — SPALLE", title:"Spalle — Lateral & Press", tag:null, objective:"Stacca 3 minuti dopo gambe, poi attacca spalle",
-          exercises:[
-            {id:"A6a", letter:"6", name:"DB Bent-Over Lateral Raise", sets:4, reps:"12", tut:"2s hold al top", rest:"60s", note:null},
-            {id:"A6b", letter:"7", name:"Cable Single-Arm Side Lateral Raise", sets:4, reps:"8 per lato", tut:"3s negative", rest:"60s", note:null},
-            {id:"A6c", letter:"8A", name:"Dumbbell Overhead Press (SS)", sets:3, reps:"20", tut:null, rest:"→ 8B", note:"Superset con Scaption Raises"},
-            {id:"A6d", letter:"8B", name:"Scaption Raises (SS)", sets:3, reps:"12", tut:"2s hold al top", rest:"60s", note:null},
-          ]
-        },
-        {
-          id:"A7", num:"FINISHER", title:"Conditioning (Opzionale +10 min)", tag:"finisher", objective:"Solo se RPE < 8.5 a fine sessione",
-          exercises:[
-            {id:"A7a", letter:"F", name:"KB Swing + Vogatore", sets:3, reps:"10 KB Swing pesanti + 200m vogatore (sprint)", tut:null, rest:"60s tra round", note:"Opzionale. Non sacrificare il recupero"},
+            {id:"A5a", letter:"5A", name:"Dumbbell Bent-Over Lateral Raise", sets:4, reps:"12", tut:"2s hold al top", rest:"45s", note:null},
+            {id:"A5b", letter:"5B-1", name:"Cable Single-Arm Side Lateral Raise (SS)", sets:3, reps:"8 per lato", tut:"3s negative", rest:"→ 5B-2 senza riposo", note:"Superset: Cable Lateral Raise → immediato Overhead Press. 3 round, rest 60s"},
+            {id:"A5c", letter:"5B-2", name:"Dumbbell Overhead Press (SS)", sets:3, reps:"12", tut:null, rest:"60s poi ripeti round", note:null},
           ]
         },
       ],
-      progressionExercises: ["Hip Thrust","Barbell Good Morning","Leg Press","Safety Bar / Back Squat","Stiff Leg RDL","Bulgarian Split Squat","DB Overhead Press"]
+      progressionExercises: ["Hip Thrust","Barbell Good Morning","Leg Press","Safety Bar / Back Squat","DB Overhead Press"]
     },
     B: {
       name: "Petto / Dorso",
       emoji: "💪",
       color: "session-b",
-      duration: "80–90 min",
+      duration: "58–63 min",
       warmup: {
         title: "Warm-Up — Vogatore + Mobilità Spalle",
-        time: "10 min totali",
+        time: "7 min totali",
         exercises: [
-          {name:"Vogatore", specs:"5 min a intensità moderata"},
-          {name:"Banded Pull-Apart", specs:"3×15 — aperture con elastico"},
-          {name:"PVC/Bamboo Bar Bench Press", specs:"2×10 — attivazione pettorali"},
-          {name:"Arm Circle + Shoulder CARs", specs:"2×10 per lato"},
+          {name:"Vogatore", specs:"4 min a intensità moderata"},
+          {name:"Banded Pull-Apart", specs:"2×15 — aperture con elastico"},
+          {name:"PVC Bench Press / Arm Circle", specs:"1×10 per lato — attivazione"},
         ]
       },
       blocks: [
         {
-          id:"B1", num:"BLOCCO 1", title:"Petto Pre-Fatigue (DB Bench Anarchy)", tag:null, objective:"Portare sangue nel pettorale con tecniche di overload progressivo — ispirato al 'DB Bench Press Anarchy' (90 Day Get Huge)",
+          id:"B1", num:"BLOCCO 1", title:"Petto Pre-Fatigue (DB Bench Press Anarchy)", tag:null,
+          objective:"Portare sangue nel pettorale e pre-affaticare prima del compound pesante — ispirato al protocollo DB Bench Press Anarchy (90 Day Get Huge, Lipson)",
           exercises:[
-            {id:"B1a", letter:"1", name:"DB Bench Press — 5 set (Anarchy)", sets:5, reps:"Set1:20 / Set2:10 half-bottom / Set3:10 half-top / Set4:15×3s neg / Set5:10+DS-30%×20", tut:"Vedi struttura", rest:"90s tra set", note:"Registra il carico sul Set 4 (15 reps 3s negative). Set1: blood flow leggero. Set2: half rep dal bottom→full. Set3: half rep dal top→full. Set4: 3s negative pesante. Set5: pesante poi DS -30%"},
+            {id:"B1a", letter:"1", name:"DB Bench Press — 3 set selezionati", sets:3, reps:"Set1:20 / Set2:12×3s neg / Set3:8+DS-30%×15", tut:"Vedi struttura", rest:"90s tra set", note:"Set1: 20 reps blood flow, carico leggero. Set2: 12 reps 3s negative, carico moderato-pesante. Set3: 8 reps pesanti poi DS -30% × 15 reps. Registra il carico del Set 2"},
           ]
         },
         {
-          id:"B2", num:"BLOCCO 2", title:"Chest Compound Strength", tag:"compound", objective:"Massimo carico e TUT sul pettorale",
+          id:"B2", num:"BLOCCO 2", title:"Chest Compound Strength", tag:"compound",
+          objective:"Massimo carico e TUT sul pettorale",
           exercises:[
-            {id:"B2a", letter:"2A", name:"Incline Plate Loaded Bench Press", sets:4, reps:"8", tut:"3s negative", rest:"2 min", note:"Carico pesante RPE 8"},
-            {id:"B2b", letter:"2B-1", name:"Incline DB Chest Press (Pump) — SS", sets:3, reps:"20", tut:"moderato", rest:"→ 2B-2", note:"Superset: Incline DB Press 20 reps pump → immediato Barbell Incline Press 10 reps 10s negative. Usa spotter se disponibile"},
-            {id:"B2c", letter:"2B-2", name:"Barbell Incline Press (TUT 10s neg) — SS", sets:3, reps:"10", tut:"10s negative (TUT estremo)", rest:"2 min", note:null},
+            {id:"B2a", letter:"2A", name:"Incline Plate Loaded Bench Press", sets:4, reps:"8", tut:"3s negative", rest:"90s", note:"Carico pesante (RPE 8)"},
+            {id:"B2b", letter:"2B-1", name:"Incline DB Press — Pump (SS)", sets:3, reps:"15", tut:"moderato", rest:"→ 2B-2 senza riposo", note:"Superset: Incline DB Press 15 reps → immediato Barbell Incline Press 8 reps 5s negative. 3 round, rest 90s"},
+            {id:"B2c", letter:"2B-2", name:"Barbell Incline Press — TUT 5s neg (SS)", sets:3, reps:"8", tut:"5s negative", rest:"90s poi ripeti round", note:"Usa spotter se disponibile per le negative sul bilanciere"},
           ]
         },
         {
-          id:"B3", num:"BLOCCO 3", title:"Chest Finisher — TRI-SET", tag:"triset", objective:"Esaurimento totale delle fibre pettorali — 3 round, rest 90s",
+          id:"B3", num:"BLOCCO 3", title:"Chest Finisher — TRI-SET", tag:"triset",
+          objective:"Esaurimento finale delle fibre pettorali · 3 round · Rest 90s",
           exercises:[
-            {id:"B3a", letter:"3A", name:"Flat Dumbbell Fly", sets:3, reps:"8", tut:"eccentrico controllato, ROM completa", rest:"→ 3B", note:null},
-            {id:"B3b", letter:"3B", name:"Neutral Grip DB Bench Press", sets:3, reps:"8", tut:"concentrica esplosiva", rest:"→ 3C", note:null},
+            {id:"B3a", letter:"3A", name:"Flat Dumbbell Fly", sets:3, reps:"8", tut:"eccentrica controllata, ROM completa", rest:"→ 3B", note:null},
+            {id:"B3b", letter:"3B", name:"Neutral Grip Dumbbell Bench Press", sets:3, reps:"8", tut:"concentrica esplosiva", rest:"→ 3C", note:null},
             {id:"B3c", letter:"3C", name:"Dips", sets:3, reps:"AMRAP", tut:"cedimento tecnico", rest:"90s poi ripeti round", note:"Non collassare al bottom. Stop al cedimento tecnico"},
           ]
         },
         {
-          id:"B4", num:"BLOCCO 4", title:"Dorso Compound — Pulling Strength", tag:"compound", objective:"Forza di trazione e spessore del dorso",
+          id:"B4", num:"BLOCCO 4", title:"Dorso — Pulling Strength", tag:"compound",
+          objective:"Forza di trazione, spessore e larghezza del dorso",
           exercises:[
-            {id:"B4a", letter:"4A", name:"Reverse Grip Pulldown", sets:4, reps:"12 totali", tut:"4×3s neg + 4×3s hold + 4 regolari", rest:"30s → 4B", note:"12 reps strutturate: 4 reps 3s negative + 4 reps 3s hold in basso (picco contrazione lat) + 4 reps regolari"},
-            {id:"B4b", letter:"4B", name:"Plate Loaded High Row", sets:3, reps:"8", tut:"2s hold al bottom", rest:"60s", note:"Petto sulla macchina"},
-            {id:"B4c", letter:"4C", name:"T-Bar Row", sets:4, reps:"20", tut:null, rest:"90s", note:"Carico moderato — pump e metabolic stress"},
-          ]
-        },
-        {
-          id:"B5", num:"BLOCCO 5", title:"Dorso Detail & Width", tag:null, objective:"Spessore e larghezza del dorso, qualità muscolare",
-          exercises:[
-            {id:"B5a", letter:"5A", name:"Plate Loaded Mid Row", sets:4, reps:"12 totali", tut:"8 alternando static hold + 4 bilaterali", rest:"2 min", note:"8 reps alternando static hold (4 dx, 4 sx) + 4 reps regolari bilaterali"},
-            {id:"B5b", letter:"5B", name:"Wide Grip Pull-Up", sets:4, reps:"AMRAP", tut:"3s negative ad ogni rep", rest:"2 min", note:"Usa elastico se necessario per mantenere le 3s negative"},
-          ]
-        },
-        {
-          id:"B6", num:"BLOCCO 6", title:"Dorso TRI-SET — Finisher", tag:"triset", objective:"3 round, rest 2 minuti",
-          exercises:[
-            {id:"B6a", letter:"6A", name:"Cable Row (Reverse Grip)", sets:3, reps:"8", tut:null, rest:"→ 6B", note:"Gomiti lungo i fianchi"},
-            {id:"B6b", letter:"6B", name:"Cable Row (Overhand Grip)", sets:3, reps:"8", tut:null, rest:"→ 6C", note:"Gomiti alti, focus sui romboidi"},
-            {id:"B6c", letter:"6C", name:"Stiff Arm Rope Pullover", sets:3, reps:"8", tut:"2s hold al bottom", rest:"2 min poi ripeti round", note:"Lat in massima contrazione"},
-          ]
-        },
-        {
-          id:"B7", num:"FINISHER", title:"Conditioning (Opzionale +10 min)", tag:"finisher", objective:"Solo se RPE < 8.5 a fine sessione",
-          exercises:[
-            {id:"B7a", letter:"F", name:"KB Row + Vogatore", sets:4, reps:"15 KB Row per lato + 250m vogatore (pace forte)", tut:null, rest:"90s tra round", note:"Opzionale"},
+            {id:"B4a", letter:"4A", name:"Reverse Grip Pulldown", sets:3, reps:"12 totali strutturate", tut:"4×3s neg + 4×3s hold bottom + 4 regolari", rest:"30s", note:"12 reps: 4 reps 3s negative + 4 reps 3s hold in basso (picco contrazione lat) + 4 reps regolari"},
+            {id:"B4b", letter:"4B", name:"T-Bar Row", sets:3, reps:"15", tut:null, rest:"90s", note:"Carico moderato — pump e metabolic stress"},
+            {id:"B4c", letter:"4C", name:"Wide Grip Pull-Up", sets:3, reps:"AMRAP", tut:"3s negative ad ogni rep", rest:"90s", note:"Usa elastico se necessario per mantenere le 3s negative"},
           ]
         },
       ],
-      progressionExercises: ["DB Bench Press Anarchy (set4—15×3s neg)","Incline Plate Loaded Bench","Incline DB Press (Pump SS)","Barbell Incline Press (10s neg SS)","T-Bar Row","Wide Grip Pull-Up (DB zavorra)"]
+      progressionExercises: ["DB Bench Press Anarchy (set2—12×3s neg)","Incline Plate Loaded Bench","Incline DB Press (SS)","Barbell Incline Press (5s neg SS)","T-Bar Row"]
     },
     C: {
       name: "Bicipiti / Tricipiti",
       emoji: "🔥",
       color: "session-c",
-      duration: "65–75 min",
+      duration: "57–62 min",
       warmup: {
         title: "Warm-Up — Vogatore + Attivazione Braccia",
-        time: "8 min totali",
+        time: "6 min totali",
         exercises: [
           {name:"Vogatore", specs:"4 min — cadenza moderata"},
-          {name:"Banded Tricep Pushdown", specs:"2×20 — attivazione"},
+          {name:"Banded Tricep Pushdown", specs:"2×15 — attivazione"},
           {name:"Banded Bicep Curl", specs:"2×15 — attivazione"},
-          {name:"Wrist Circle + Elbow CARs", specs:"2×10 per lato"},
         ]
       },
       blocks: [
         {
-          id:"C1", num:"SS 1", title:"Pump & Blood Flow — Superset", tag:"superset", objective:"Portare sangue nelle braccia, attivare le fibre",
+          id:"C1", num:"SS 1", title:"Pump & Blood Flow — Superset", tag:"superset",
+          objective:"Attivare le braccia e portare sangue prima del lavoro pesante",
           exercises:[
-            {id:"C1a", letter:"1A", name:"Rope Pushdown (Tricipiti)", sets:4, reps:"Set1:30 / Set2:20 / Set3:10 / Set4:10+DS-30%×10", tut:null, rest:"→ 1B (no rest)", note:"Discesa progressiva reps. Set 4 con Drop Set immediato -30%"},
-            {id:"C1b", letter:"1B", name:"Spider Curl con bilanciere EZ (Bicipiti)", sets:4, reps:"Set1:15 / Set2:12 / Set3:10 / Set4:10+DS-30%×10", tut:null, rest:"90s dopo ogni SS", note:null},
+            {id:"C1a", letter:"1A", name:"Rope Pushdown (Tricipiti)", sets:3, reps:"Set1:25 / Set2:15 / Set3:10+DS-30%×10", tut:null, rest:"→ 1B senza riposo", note:"Discesa progressiva reps. Set 3 con Drop Set immediato -30%"},
+            {id:"C1b", letter:"1B", name:"EZ Bar Spider Curl (Bicipiti)", sets:3, reps:"Set1:12 / Set2:10 / Set3:8+DS-30%×8", tut:null, rest:"90s dopo ogni SS", note:null},
           ]
         },
         {
-          id:"C2", num:"SS 2", title:"TUT & Mechanical Overload — Superset", tag:"superset", objective:null,
+          id:"C2", num:"SS 2", title:"TUT & Mechanical Overload — Superset", tag:"superset",
+          objective:"Volume ad alta intensità con overload eccentrico",
           exercises:[
-            {id:"C2a", letter:"2A", name:"Rolling Extension → Skull Crusher → Close Grip Press (Complesso)", sets:4, reps:"10+10+10 = 30 totali per set", tut:"no stop tra i movimenti", rest:"→ 2B (no rest)", note:"Sequenza senza stop: 10 rolling extensions + 10 skull crushers + 10 close grip press = 30 totali"},
-            {id:"C2b", letter:"2B", name:"Single Arm Curl con Hold + Double Arm Curl", sets:4, reps:"10 singoli per braccio + 10 bilaterali", tut:"isometric hold braccio fermo", rest:"90s dopo ogni SS", note:"10 curl singoli per braccio tenendo l'altro fermo in contrazione → immediato 10 curl bilaterali"},
+            {id:"C2a", letter:"2A", name:"Rolling Extension → Skull Crusher → Close Grip Press (Complesso)", sets:3, reps:"8+8+8 = 24 totali per set", tut:"no stop tra i movimenti", rest:"→ 2B senza riposo", note:"8 rolling extensions + 8 skull crushers + 8 close grip press = 24 totali. Nessuno stop tra i movimenti"},
+            {id:"C2b", letter:"2B", name:"Single Arm Curl con Hold Isometrico → Double Arm Curl", sets:3, reps:"8 singoli per braccio + 8 bilaterali", tut:"isometric hold braccio fermo", rest:"90s dopo ogni SS", note:"8 curl singoli per braccio tenendo l'altro fermo in contrazione → immediato 8 curl bilaterali"},
           ]
         },
         {
-          id:"C3", num:"SS 3", title:"Eccentric Overload & Cheat Reps — Superset", tag:"superset", objective:null,
+          id:"C3", num:"SS 3", title:"Eccentric Overload — Superset", tag:"superset",
+          objective:"Overload eccentrico — danno muscolare e TUT massimizzato",
           exercises:[
-            {id:"C3a", letter:"3A", name:"Double Contraction Dips (Tricipiti)", sets:4, reps:"10", tut:"metà ROM up → full rep + 3s negative", rest:"→ 3B", note:"Tecnica: metà ROM up → full rep = 1 rep. 3s negative ad ogni discesa"},
-            {id:"C3b", letter:"3B", name:"Cheat Curl con Bilanciere", sets:4, reps:"10", tut:"3s negative controllata", rest:"90s dopo ogni SS", note:"Leggero slancio per salire ma 3s negative controllata in discesa"},
+            {id:"C3a", letter:"3A", name:"Dumbbell Skull Crusher", sets:3, reps:"10", tut:"3s negative", rest:"→ 3B senza riposo", note:null},
+            {id:"C3b", letter:"3B", name:"Cheat Curl con Bilanciere", sets:3, reps:"8", tut:"3s negative controllata in discesa", rest:"90s dopo ogni SS", note:"Leggero slancio per salire, 3s negative controllata in discesa"},
           ]
         },
         {
-          id:"C4", num:"BLOCCO 4", title:"Isolamento Bicipiti", tag:null, objective:null,
+          id:"C4", num:"TRI-SET FINALE", title:"Braccia — Finisher TRI-SET", tag:"triset",
+          objective:"Esaurimento finale, pump massimo · 3 round · Rest 90s",
           exercises:[
-            {id:"C4a", letter:"4", name:"Barbell Curl (Pump)", sets:4, reps:"20", tut:null, rest:"30s", note:"Carico leggero-moderato, focus sulla contrazione"},
-            {id:"C4b", letter:"5", name:"Dumbbell Concentration Curl", sets:4, reps:"12 totali strutturate", tut:"4×3s neg + 4×3s hold top + 4 regolari", rest:"60s", note:null},
-          ]
-        },
-        {
-          id:"C5", num:"BLOCCO 5", title:"TRI-SET Bicipiti", tag:"triset", objective:"4 round, rest 90 secondi",
-          exercises:[
-            {id:"C5a", letter:"6A", name:"Incline DB Curl Alternati con Static Hold", sets:4, reps:"8", tut:null, rest:"→ 6B", note:null},
-            {id:"C5b", letter:"6B", name:"Incline Hammer Curl", sets:4, reps:"8", tut:null, rest:"→ 6C", note:null},
-            {id:"C5c", letter:"6C", name:"EZ Bar Spider Curl", sets:4, reps:"8", tut:"2s hold al top", rest:"90s poi ripeti round", note:null},
-          ]
-        },
-        {
-          id:"C6", num:"BLOCCO 6", title:"Isolamento Tricipiti", tag:null, objective:null,
-          exercises:[
-            {id:"C6a", letter:"7", name:"Dumbbell Skull Crusher", sets:4, reps:"12 totali strutturate", tut:"4×3s neg + 4×static hold alternato + 4 regolari", rest:"60s", note:"4 reps 3s negative + 4 reps alternando static hold (braccio dx fermo, sx scende) + 4 reps regolari"},
-          ]
-        },
-        {
-          id:"C7", num:"BLOCCO 7", title:"TRI-SET Tricipiti", tag:"triset", objective:"4 round, rest 90 secondi",
-          exercises:[
-            {id:"C7a", letter:"8A", name:"Dual-Cable Pushdown (Reverse Grip)", sets:4, reps:"10", tut:"static hold alternato", rest:"→ 8B", note:null},
-            {id:"C7b", letter:"8B", name:"Dual-Cable Pushdown (Overhand Grip)", sets:4, reps:"10", tut:null, rest:"→ 8C", note:null},
-            {id:"C7c", letter:"8C", name:"Dumbbell Kickback", sets:4, reps:"10", tut:"2s hold al top", rest:"90s poi ripeti round", note:null},
-          ]
-        },
-        {
-          id:"C8", num:"FINISHER", title:"Conditioning (Opzionale +8 min)", tag:"finisher", objective:"Solo se RPE < 8.5 a fine sessione",
-          exercises:[
-            {id:"C8a", letter:"F", name:"KB Thruster + Vogatore", sets:3, reps:"10 KB Thruster leggeri + 200m vogatore (pace forte)", tut:null, rest:"60s tra round", note:"Opzionale"},
+            {id:"C4a", letter:"A", name:"Dumbbell Kickback (Tricipiti)", sets:3, reps:"10", tut:"2s hold al top", rest:"→ B senza riposo", note:null},
+            {id:"C4b", letter:"B", name:"Incline Dumbbell Curl Alternato con Static Hold (Bicipiti)", sets:3, reps:"8 per braccio", tut:null, rest:"→ C senza riposo", note:null},
+            {id:"C4c", letter:"C", name:"Double Contraction Dips (Tricipiti)", sets:3, reps:"AMRAP", tut:"metà ROM up → full rep = 1 rep", rest:"90s poi ripeti round", note:"Stop al cedimento tecnico"},
           ]
         },
       ],
-      progressionExercises: ["Skull Crusher / Rolling Extension","Close Grip Press","Barbell Curl","Cheat Curl","EZ Bar Spider Curl"]
+      progressionExercises: ["Skull Crusher / Rolling Extension","Close Grip Press","EZ Bar Spider Curl","Cheat Curl"]
     }
   }
 };
