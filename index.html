@@ -3,134 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🪓 Building Vikings — Workout Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>⚔️ Iron Saga — Workout Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Oswald:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
+/* ═══════════════════════════════════════════════════
+   PREMIUM DESIGN SYSTEM — "Forged Iron" aesthetic
+   Deep charcoal/obsidian base, hammered-bronze/amber accents,
+   subtle noise/gradient texture, Cinzel for display type
+   (Nordic/carved-stone feel) + Oswald for body + Space Mono for data
+   ═══════════════════════════════════════════════════ */
 :root {
-  --bg-void:#0a0905; --bg-dark:#0f0e0b; --bg-card:#161410; --bg-card2:#1c1a14;
-  --bg-input:#201e17; --amber:#d4880a; --amber-bright:#f0a020; --amber-glow:#ffb830;
-  --amber-dim:#7a4d08; --iron:#3a3628; --iron-light:#524e3c;
-  --text-primary:#e8dfc8; --text-secondary:#9a9080; --text-dim:#5a5448;
-  --red-danger:#c03020; --green-ok:#4a8a40; --border:rgba(212,136,10,0.18);
-  --border-hover:rgba(240,160,32,0.5); --shadow-amber:0 0 30px rgba(212,136,10,0.15);
-  --font-title:'Oswald',sans-serif; --font-mono:'Space Mono',monospace;
+  --void:#08070a;
+  --obsidian:#0d0c10;
+  --obsidian-2:#131217;
+  --charcoal:#1a1820;
+  --charcoal-2:#211f28;
+  --iron-border:#2a2732;
+  --iron-border-lit:#3d3947;
+
+  --bronze:#c17a2e;
+  --bronze-bright:#e0983f;
+  --bronze-glow:#f4b559;
+  --bronze-dim:#6b4519;
+  --bronze-ember:#ff9d3d;
+
+  --steel-blue:#5b7a9d;
+  --blood:#a83232;
+  --blood-bright:#d14545;
+  --moss:#4a7a5c;
+  --moss-bright:#5fa876;
+
+  --text-primary:#ede6d3;
+  --text-secondary:#a89e8a;
+  --text-dim:#5c5648;
+  --text-faint:#3a362e;
+
+  --border:rgba(193,122,46,0.16);
+  --border-hover:rgba(224,152,63,0.45);
+  --glow-bronze: 0 0 40px rgba(193,122,46,0.12);
+  --glow-bronze-strong: 0 0 24px rgba(224,152,63,0.35);
+  --shadow-deep: 0 8px 32px rgba(0,0,0,0.5);
+  --shadow-card: 0 4px 16px rgba(0,0,0,0.35);
+
+  --font-display:'Cinzel',serif;
+  --font-title:'Oswald',sans-serif;
+  --font-mono:'Space Mono',monospace;
+
+  --radius-lg:16px;
+  --radius-md:10px;
+  --radius-sm:6px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg-void);color:var(--text-primary);font-family:var(--font-title);min-height:100vh;overflow-x:hidden;padding-bottom:80px;}
-::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--bg-dark);} ::-webkit-scrollbar-thumb{background:var(--amber-dim);}
 
-/* NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,9,5,0.97);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 max(8px,env(safe-area-inset-bottom));}
-.nav-btn{background:none;border:none;color:var(--text-dim);font-family:var(--font-title);font-size:10px;letter-spacing:1px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;transition:.2s;touch-action:manipulation;}
-.nav-btn .nav-icon{font-size:20px;} .nav-btn.active{color:var(--amber-bright);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 
-/* PAGES */
-.page{display:none;padding:16px;max-width:700px;margin:0 auto;} .page.active{display:block;}
+body{
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(193,122,46,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 50% at 100% 100%, rgba(91,122,157,0.04) 0%, transparent 50%),
+    var(--void);
+  background-attachment:fixed;
+  color:var(--text-primary);
+  font-family:var(--font-title);
+  min-height:100vh;
+  overflow-x:hidden;
+  padding-bottom:84px;
+  -webkit-font-smoothing:antialiased;
+}
 
-/* HEADERS */
-.page-header{text-align:center;padding:20px 0 16px;border-bottom:1px solid var(--border);margin-bottom:20px;}
-.page-header h1{font-size:28px;font-weight:700;letter-spacing:3px;color:var(--amber-bright);}
-.page-header p{color:var(--text-secondary);font-size:12px;letter-spacing:2px;margin-top:4px;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--obsidian);}
+::-webkit-scrollbar-thumb{background:var(--bronze-dim);border-radius:3px;}
 
-/* PROGRAM SELECTOR */
-.program-selector{display:flex;gap:8px;margin-bottom:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:6px;}
-.prog-btn{flex:1;background:none;border:none;color:var(--text-secondary);font-family:var(--font-title);font-size:12px;letter-spacing:1px;padding:8px;border-radius:6px;cursor:pointer;transition:.2s;touch-action:manipulation;}
-.prog-btn.active{background:var(--amber-dim);color:var(--amber-glow);}
+/* ═══ NAV ═══ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:linear-gradient(180deg, rgba(13,12,16,0.85) 0%, rgba(8,7,10,0.98) 40%);
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;
+  padding:9px 0 max(9px,env(safe-area-inset-bottom));
+}
+.nav-btn{
+  background:none;border:none;color:var(--text-faint);
+  font-family:var(--font-title);font-size:9.5px;letter-spacing:1.5px;
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:6px 10px;transition:color .25s, transform .15s;touch-action:manipulation;
+}
+.nav-btn .nav-icon{font-size:19px;filter:grayscale(0.6) opacity(0.55);transition:filter .25s;}
+.nav-btn.active{color:var(--bronze-bright);}
+.nav-btn.active .nav-icon{filter:none;}
+.nav-btn:active{transform:scale(0.92);}
 
-/* CARDS */
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;}
-.card:hover{border-color:var(--border-hover);}
-.card-title{font-size:14px;font-weight:600;letter-spacing:2px;color:var(--amber);margin-bottom:8px;}
+/* ═══ PAGES ═══ */
+.page{display:none;padding:18px 16px;max-width:720px;margin:0 auto;}
+.page.active{display:block;animation:fadein .35s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-/* STATS GRID */
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
-.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;}
-.stat-val{font-size:28px;font-weight:700;color:var(--amber-bright);font-family:var(--font-mono);}
-.stat-lbl{font-size:10px;letter-spacing:2px;color:var(--text-secondary);margin-top:3px;}
+/* ═══ HEADERS ═══ */
+.page-header{text-align:center;padding:22px 0 18px;position:relative;margin-bottom:20px;}
+.page-header::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--bronze-dim),transparent);}
+.page-header h1{
+  font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:2.5px;
+  background:linear-gradient(180deg, var(--bronze-glow) 0%, var(--bronze) 60%, var(--bronze-dim) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 30px rgba(224,152,63,0.15);
+}
+.page-header p{color:var(--text-dim);font-size:10.5px;letter-spacing:3px;margin-top:6px;font-weight:400;text-transform:uppercase;}
 
-/* DOTS */
-.dots-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
-.day-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--iron);background:var(--bg-card2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;cursor:pointer;transition:.2s;touch-action:manipulation;}
-.day-dot.done{background:var(--amber-dim);border-color:var(--amber);color:var(--amber-glow);}
-.day-dot.current{border-color:var(--amber-bright);box-shadow:0 0 8px var(--amber);}
-.day-dot.rest{border-style:dashed;color:var(--text-dim);}
+/* ═══ PROGRAM SELECTOR ═══ */
+.program-selector{display:flex;gap:6px;margin-bottom:22px;background:var(--obsidian-2);border:1px solid var(--border);border-radius:var(--radius-md);padding:5px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.4);}
+.prog-btn{flex:1;background:none;border:none;color:var(--text-dim);font-family:var(--font-title);font-size:10.5px;font-weight:500;letter-spacing:0.5px;padding:10px 4px;border-radius:7px;cursor:pointer;transition:all .25s;touch-action:manipulation;}
+.prog-btn.active{background:linear-gradient(135deg, var(--bronze-dim), #4a2f10);color:var(--bronze-glow);box-shadow:0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);}
 
-/* SESSION CARDS */
-.session-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
-.session-label{font-size:22px;font-weight:700;letter-spacing:2px;color:var(--amber-bright);}
-.session-name{font-size:11px;color:var(--text-secondary);letter-spacing:2px;margin-top:2px;}
-.btn-primary{background:var(--amber-dim);color:var(--amber-glow);border:none;font-family:var(--font-title);font-size:12px;letter-spacing:2px;padding:10px 18px;border-radius:6px;cursor:pointer;transition:.2s;touch-action:manipulation;}
-.btn-primary:hover{background:var(--amber);color:#000;}
-.btn-secondary{background:transparent;color:var(--text-secondary);border:1px solid var(--iron);font-family:var(--font-title);font-size:11px;letter-spacing:1px;padding:8px 14px;border-radius:6px;cursor:pointer;transition:.2s;touch-action:manipulation;}
-.btn-secondary:hover{border-color:var(--amber-dim);color:var(--amber);}
-.btn-danger{background:transparent;color:var(--red-danger);border:1px solid var(--red-danger);font-family:var(--font-title);font-size:11px;letter-spacing:1px;padding:8px 14px;border-radius:6px;cursor:pointer;touch-action:manipulation;}
+/* ═══ CARDS ═══ */
+.card{
+  background:linear-gradient(160deg, var(--charcoal) 0%, var(--obsidian-2) 100%);
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:18px;margin-bottom:14px;box-shadow:var(--shadow-card);
+  position:relative;overflow:hidden;
+}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(224,152,63,0.25),transparent);}
+.card-title{font-family:var(--font-title);font-size:11px;font-weight:600;letter-spacing:2.5px;color:var(--bronze);margin-bottom:10px;text-transform:uppercase;}
 
-/* WORKOUT DETAIL */
-.back-btn{background:none;border:none;color:var(--amber);font-family:var(--font-title);font-size:13px;letter-spacing:1px;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;gap:6px;touch-action:manipulation;}
-.warmup-section{background:var(--bg-card2);border-left:3px solid var(--amber-dim);padding:12px;border-radius:0 8px 8px 0;margin-bottom:16px;}
-.warmup-title{font-size:11px;letter-spacing:2px;color:var(--amber-dim);margin-bottom:8px;}
+/* ═══ STATS ═══ */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px;}
+.stat-card{
+  background:linear-gradient(160deg, var(--charcoal) 0%, var(--obsidian-2) 100%);
+  border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:16px 12px;text-align:center;position:relative;overflow:hidden;
+}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--bronze-dim),transparent);}
+.stat-val{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--bronze-glow);letter-spacing:-0.5px;}
+.stat-lbl{font-size:9px;letter-spacing:2px;color:var(--text-dim);margin-top:4px;text-transform:uppercase;font-weight:500;}
+
+/* ═══ CYCLIC PHASE BAR (Iron Saga) ═══ */
+.phase-bar-wrap{margin:14px 0;}
+.phase-bar{display:flex;gap:3px;height:8px;border-radius:4px;overflow:hidden;margin-bottom:10px;}
+.phase-seg{flex:1;position:relative;}
+.phase-seg.hypertrophy{background:rgba(193,122,46,0.25);}
+.phase-seg.strength{background:rgba(168,50,50,0.25);}
+.phase-seg.conditioning{background:rgba(91,122,157,0.25);}
+.phase-seg.active-hypertrophy{background:var(--bronze);box-shadow:0 0 12px var(--bronze-bright);}
+.phase-seg.active-strength{background:var(--blood-bright);box-shadow:0 0 12px var(--blood-bright);}
+.phase-seg.active-conditioning{background:var(--steel-blue);box-shadow:0 0 12px var(--steel-blue);}
+.phase-labels{display:flex;justify-content:space-between;font-size:9px;letter-spacing:1px;color:var(--text-faint);text-transform:uppercase;}
+.phase-labels span.current{color:var(--bronze-glow);font-weight:600;}
+
+.rotation-pips{display:flex;gap:8px;justify-content:center;margin:14px 0;}
+.rot-pip{display:flex;flex-direction:column;align-items:center;gap:5px;opacity:0.35;transition:opacity .3s;}
+.rot-pip.active{opacity:1;}
+.rot-pip-dot{width:38px;height:38px;border-radius:50%;border:2px solid var(--iron-border);background:var(--obsidian-2);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.rot-pip.active .rot-pip-dot{border-color:var(--bronze-bright);box-shadow:0 0 14px rgba(224,152,63,0.4);background:linear-gradient(160deg,var(--charcoal-2),var(--obsidian));}
+.rot-pip-lbl{font-size:8.5px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;}
+.rot-pip.active .rot-pip-lbl{color:var(--bronze-bright);}
+
+/* ═══ DOTS (finite programs) ═══ */
+.dots-row{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0;}
+.day-dot{
+  width:34px;height:34px;border-radius:50%;border:1.5px solid var(--iron-border);
+  background:var(--obsidian-2);display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:600;cursor:pointer;transition:.2s;touch-action:manipulation;color:var(--text-dim);
+}
+.day-dot.done{background:linear-gradient(160deg,var(--bronze-dim),#4a2f10);border-color:var(--bronze);color:var(--bronze-glow);}
+.day-dot.current{border-color:var(--bronze-bright);box-shadow:0 0 12px rgba(224,152,63,0.5);}
+.day-dot.rest{border-style:dashed;color:var(--text-faint);}
+
+/* ═══ SESSION CARDS ═══ */
+.session-card{
+  background:linear-gradient(135deg, var(--charcoal) 0%, var(--obsidian-2) 100%);
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:18px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;
+  box-shadow:var(--shadow-card);position:relative;overflow:hidden;
+}
+.session-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(224,152,63,0.25),transparent);}
+.session-label{font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:1.5px;color:var(--bronze-glow);}
+.session-name{font-size:11px;color:var(--text-secondary);letter-spacing:1px;margin-top:3px;}
+.session-phase-tag{display:inline-block;font-size:8.5px;letter-spacing:1.5px;padding:3px 8px;border-radius:10px;margin-top:6px;text-transform:uppercase;font-weight:600;}
+.session-phase-tag.hypertrophy{background:rgba(193,122,46,0.18);color:var(--bronze-bright);border:1px solid rgba(193,122,46,0.35);}
+.session-phase-tag.strength{background:rgba(168,50,50,0.18);color:var(--blood-bright);border:1px solid rgba(168,50,50,0.35);}
+.session-phase-tag.conditioning{background:rgba(91,122,157,0.18);color:var(--steel-blue);border:1px solid rgba(91,122,157,0.35);}
+
+.btn-primary{
+  background:linear-gradient(160deg, var(--bronze) 0%, var(--bronze-dim) 100%);
+  color:#1a1006;border:none;font-family:var(--font-title);font-weight:600;
+  font-size:11.5px;letter-spacing:1.5px;padding:11px 20px;border-radius:8px;
+  cursor:pointer;transition:.2s;touch-action:manipulation;
+  box-shadow:0 3px 10px rgba(193,122,46,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  text-transform:uppercase;
+}
+.btn-primary:active{transform:scale(0.96);}
+.btn-secondary{
+  background:var(--obsidian-2);color:var(--text-secondary);border:1px solid var(--iron-border);
+  font-family:var(--font-title);font-size:10.5px;letter-spacing:1px;padding:10px 16px;
+  border-radius:8px;cursor:pointer;transition:.2s;touch-action:manipulation;
+}
+.btn-secondary:hover{border-color:var(--bronze-dim);color:var(--bronze);}
+.btn-reserve{
+  background:linear-gradient(160deg, var(--charcoal-2), var(--obsidian));
+  color:var(--steel-blue);border:1px solid rgba(91,122,157,0.35);
+  font-family:var(--font-title);font-size:11px;font-weight:600;letter-spacing:1.5px;
+  padding:12px 18px;border-radius:10px;cursor:pointer;transition:.2s;
+  width:100%;text-transform:uppercase;touch-action:manipulation;
+}
+.btn-reserve:active{transform:scale(0.98);}
+.btn-danger{background:transparent;color:var(--blood-bright);border:1px solid var(--blood);font-family:var(--font-title);font-size:10.5px;letter-spacing:1px;padding:10px 16px;border-radius:8px;cursor:pointer;touch-action:manipulation;}
+
+/* ═══ WORKOUT DETAIL ═══ */
+.back-btn{background:none;border:none;color:var(--bronze);font-family:var(--font-title);font-size:12.5px;letter-spacing:1px;cursor:pointer;margin-bottom:18px;display:flex;align-items:center;gap:6px;touch-action:manipulation;}
+.warmup-section{
+  background:linear-gradient(135deg, rgba(255,157,61,0.06), transparent);
+  border-left:3px solid var(--bronze-dim);padding:14px 16px;border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:18px;
+}
+.warmup-title{font-size:10.5px;letter-spacing:2px;color:var(--bronze-dim);margin-bottom:8px;text-transform:uppercase;font-weight:600;}
 .warmup-item{font-size:12px;color:var(--text-secondary);padding:3px 0;}
 .warmup-item strong{color:var(--text-primary);}
 
-.block-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;}
-.block-header{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;touch-action:manipulation;}
-.block-num{font-size:10px;letter-spacing:2px;color:var(--amber-dim);}
-.block-title{font-size:14px;font-weight:600;letter-spacing:1px;color:var(--text-primary);margin-top:2px;}
-.block-tag{font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:10px;border:1px solid var(--amber-dim);color:var(--amber-dim);}
-.block-body{padding:0 16px 16px;display:none;}
-.block-body.open{display:block;}
-.block-objective{font-size:11px;color:var(--text-secondary);margin-bottom:12px;font-style:italic;}
+.block-card{
+  background:linear-gradient(160deg, var(--charcoal) 0%, var(--obsidian-2) 100%);
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  margin-bottom:13px;overflow:hidden;box-shadow:var(--shadow-card);
+}
+.block-header{padding:15px 17px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;touch-action:manipulation;}
+.block-num{font-size:9.5px;letter-spacing:2px;color:var(--bronze-dim);text-transform:uppercase;font-weight:600;}
+.block-title{font-size:14px;font-weight:600;letter-spacing:0.5px;color:var(--text-primary);margin-top:3px;}
+.block-tag{font-size:8.5px;letter-spacing:1px;padding:3px 8px;border-radius:10px;border:1px solid var(--bronze-dim);color:var(--bronze-dim);text-transform:uppercase;}
+.block-body{padding:0 17px 17px;display:none;}
+.block-body.open{display:block;animation:fadein .25s ease;}
+.block-objective{font-size:11px;color:var(--text-secondary);margin-bottom:14px;font-style:italic;line-height:1.5;}
 
-.ex-block{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--iron);}
+.anchor-badge{display:inline-flex;align-items:center;gap:4px;font-size:8.5px;letter-spacing:1.5px;padding:3px 9px;border-radius:10px;background:rgba(224,152,63,0.12);color:var(--bronze-glow);border:1px solid rgba(224,152,63,0.3);text-transform:uppercase;font-weight:700;margin-bottom:8px;}
+
+.ex-block{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--iron-border);}
 .ex-block:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
-.ex-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.ex-name{font-size:13px;font-weight:600;color:var(--amber-bright);}
-.ex-letter{font-size:10px;color:var(--amber-dim);letter-spacing:1px;}
+.ex-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px;}
+.ex-name{font-size:13.5px;font-weight:600;color:var(--bronze-glow);line-height:1.3;}
+.ex-letter{font-size:9.5px;color:var(--bronze-dim);letter-spacing:1px;font-weight:600;}
 .ex-meta{font-size:11px;color:var(--text-secondary);margin-bottom:6px;font-family:var(--font-mono);}
-.ex-note{font-size:11px;color:var(--text-dim);font-style:italic;margin-bottom:8px;}
+.ex-note{font-size:11px;color:var(--text-dim);font-style:italic;margin-bottom:10px;line-height:1.4;}
 
-/* SET TABLE */
-.set-table{width:100%;border-collapse:collapse;margin-top:6px;}
-.set-table th{font-size:9px;letter-spacing:2px;color:var(--text-dim);padding:4px 6px;text-align:center;border-bottom:1px solid var(--iron);}
-.set-table td{padding:5px 4px;text-align:center;vertical-align:middle;}
+/* ═══ SET TABLE ═══ */
+.set-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.set-table th{font-size:8.5px;letter-spacing:2px;color:var(--text-faint);padding:5px 6px;text-align:center;border-bottom:1px solid var(--iron-border);text-transform:uppercase;}
+.set-table td{padding:6px 4px;text-align:center;vertical-align:middle;}
 .set-num{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);}
 .prec-val{font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);}
-.set-input{background:var(--bg-input);border:1px solid var(--iron);color:var(--text-primary);font-family:var(--font-mono);font-size:12px;width:52px;padding:5px 4px;border-radius:4px;text-align:center;}
-.set-input:focus{outline:none;border-color:var(--amber-dim);}
-.done-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--iron);background:none;cursor:pointer;font-size:14px;transition:.2s;touch-action:manipulation;}
-.done-btn.checked{background:var(--green-ok);border-color:var(--green-ok);}
-.ex-notes-area{width:100%;margin-top:8px;background:var(--bg-input);border:1px solid var(--iron);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:6px 8px;border-radius:4px;resize:none;min-height:36px;overflow:hidden;}
-.ex-notes-area:focus{outline:none;border-color:var(--amber-dim);}
+.set-input{
+  background:var(--obsidian);border:1px solid var(--iron-border);color:var(--text-primary);
+  font-family:var(--font-mono);font-size:12px;width:54px;padding:6px 4px;border-radius:6px;text-align:center;
+}
+.set-input:focus{outline:none;border-color:var(--bronze-dim);box-shadow:0 0 0 2px rgba(193,122,46,0.15);}
+.done-btn{width:34px;height:34px;border-radius:50%;border:2px solid var(--iron-border);background:var(--obsidian);cursor:pointer;font-size:14px;transition:.2s;touch-action:manipulation;color:var(--moss-bright);}
+.done-btn.checked{background:linear-gradient(160deg,var(--moss-bright),var(--moss));border-color:var(--moss-bright);color:#fff;box-shadow:0 0 10px rgba(95,168,118,0.4);}
+.ex-notes-area{width:100%;margin-top:9px;background:var(--obsidian);border:1px solid var(--iron-border);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:7px 9px;border-radius:6px;resize:none;min-height:36px;overflow:hidden;}
+.ex-notes-area:focus{outline:none;border-color:var(--bronze-dim);}
 
-/* CHARTS */
-.chart-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;}
-.chart-title{font-size:12px;letter-spacing:2px;color:var(--amber);margin-bottom:12px;}
+/* ═══ CHARTS ═══ */
+.chart-wrap{
+  background:linear-gradient(160deg, var(--charcoal) 0%, var(--obsidian-2) 100%);
+  border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:14px;
+  box-shadow:var(--shadow-card);
+}
+.chart-title{font-size:11px;letter-spacing:2.5px;color:var(--bronze);margin-bottom:14px;text-transform:uppercase;font-weight:600;}
+.chart-subtitle{font-size:10px;color:var(--text-dim);margin-top:-10px;margin-bottom:14px;font-style:italic;}
+.fondamentale-select{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.fnd-btn{background:var(--obsidian-2);border:1px solid var(--iron-border);color:var(--text-dim);font-family:var(--font-title);font-size:10px;letter-spacing:0.5px;padding:7px 12px;border-radius:16px;cursor:pointer;transition:.2s;touch-action:manipulation;}
+.fnd-btn.active{background:linear-gradient(135deg,var(--bronze-dim),#4a2f10);color:var(--bronze-glow);border-color:var(--bronze);}
 
-/* SETTINGS */
-.setting-row{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;}
-.setting-label{font-size:12px;letter-spacing:2px;color:var(--text-primary);margin-bottom:6px;}
-.setting-desc{font-size:11px;color:var(--text-dim);margin-bottom:10px;}
+/* ═══ SETTINGS ═══ */
+.setting-row{
+  background:linear-gradient(160deg, var(--charcoal) 0%, var(--obsidian-2) 100%);
+  border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:11px;
+}
+.setting-label{font-size:12px;letter-spacing:2px;color:var(--text-primary);margin-bottom:6px;text-transform:uppercase;font-weight:600;}
+.setting-desc{font-size:11px;color:var(--text-dim);margin-bottom:11px;line-height:1.4;}
 .file-input{display:none;}
-.file-label{display:inline-block;background:var(--bg-input);border:1px dashed var(--iron);color:var(--text-secondary);font-family:var(--font-title);font-size:11px;letter-spacing:1px;padding:10px 16px;border-radius:6px;cursor:pointer;margin-bottom:8px;}
-.import-feedback{font-size:11px;font-family:var(--font-mono);margin-top:6px;}
-.import-feedback.ok{color:var(--green-ok);} .import-feedback.err{color:var(--red-danger);}
+.file-label{display:inline-block;background:var(--obsidian);border:1px dashed var(--iron-border-lit);color:var(--text-secondary);font-family:var(--font-title);font-size:11px;letter-spacing:1px;padding:11px 18px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:.2s;}
+.file-label:hover{border-color:var(--bronze-dim);color:var(--bronze);}
+.import-feedback{font-size:11px;font-family:var(--font-mono);margin-top:7px;}
+.import-feedback.ok{color:var(--moss-bright);} .import-feedback.err{color:var(--blood-bright);}
 
-/* NOTE */
-.note-section{margin-bottom:20px;}
-.note-h2{font-size:14px;letter-spacing:2px;color:var(--amber);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.note-text{font-size:12px;color:var(--text-secondary);line-height:1.7;}
+/* ═══ NOTE ═══ */
+.note-section{margin-bottom:22px;}
+.note-h2{font-family:var(--font-title);font-size:13px;letter-spacing:2.5px;color:var(--bronze);margin-bottom:11px;padding-bottom:8px;border-bottom:1px solid var(--border);text-transform:uppercase;font-weight:600;}
+.note-text{font-size:12px;color:var(--text-secondary);line-height:1.8;}
 .note-table{width:100%;border-collapse:collapse;margin:8px 0;}
-.note-table th{font-size:10px;letter-spacing:2px;color:var(--text-dim);padding:6px;border-bottom:1px solid var(--iron);text-align:left;}
-.note-table td{font-size:11px;color:var(--text-secondary);padding:6px;border-bottom:1px solid rgba(58,54,40,0.4);}
-.note-table td:first-child{color:var(--amber-bright);font-family:var(--font-mono);}
+.note-table th{font-size:9.5px;letter-spacing:2px;color:var(--text-faint);padding:7px 6px;border-bottom:1px solid var(--iron-border);text-align:left;text-transform:uppercase;}
+.note-table td{font-size:11px;color:var(--text-secondary);padding:7px 6px;border-bottom:1px solid rgba(42,39,50,0.5);}
+.note-table td:first-child{color:var(--bronze-glow);font-family:var(--font-mono);}
 
-/* TOAST */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--amber-dim);color:var(--amber-glow);font-family:var(--font-title);font-size:12px;letter-spacing:1px;padding:10px 20px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:500;}
+/* ═══ TOAST ═══ */
+.toast{
+  position:fixed;bottom:94px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:linear-gradient(135deg,var(--bronze-dim),#4a2f10);color:var(--bronze-glow);
+  font-family:var(--font-title);font-size:12px;font-weight:600;letter-spacing:1px;
+  padding:11px 22px;border-radius:24px;opacity:0;transition:.3s;pointer-events:none;z-index:500;
+  box-shadow:0 6px 20px rgba(0,0,0,0.4);
+}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* HIIT badge */
-.hiit-badge{background:rgba(192,48,32,0.2);border:1px solid var(--red-danger);color:#e05040;font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:10px;}
+/* ═══ HIIT badge ═══ */
+.hiit-badge{background:rgba(168,50,50,0.15);border:1px solid var(--blood);color:var(--blood-bright);font-size:9px;letter-spacing:1.5px;padding:3px 9px;border-radius:10px;text-transform:uppercase;font-weight:700;}
+
+/* ═══ HIIT workout name callout ═══ */
+.hiit-name{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--blood-bright);letter-spacing:1px;margin-bottom:4px;}
 
 @media(min-width:500px){.stats-grid{grid-template-columns:repeat(4,1fr);}}
 </style>
@@ -138,19 +315,20 @@ body{background:var(--bg-void);color:var(--text-primary);font-family:var(--font-
 <body>
 
 <nav class="bottom-nav">
-  <button class="nav-btn active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="nav-icon">🏠</span>HOME</button>
-  <button class="nav-btn" onclick="showPage('workout')" id="nav-workout"><span class="nav-icon">💪</span>WORKOUT</button>
-  <button class="nav-btn" onclick="showPage('progressi')" id="nav-progressi"><span class="nav-icon">📊</span>PROGRESSI</button>
-  <button class="nav-btn" onclick="showPage('note')" id="nav-note"><span class="nav-icon">📋</span>NOTE</button>
+  <button class="nav-btn active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="nav-icon">🏛️</span>HOME</button>
+  <button class="nav-btn" onclick="showPage('workout')" id="nav-workout"><span class="nav-icon">⚔️</span>WORKOUT</button>
+  <button class="nav-btn" onclick="showPage('progressi')" id="nav-progressi"><span class="nav-icon">📈</span>PROGRESSI</button>
+  <button class="nav-btn" onclick="showPage('note')" id="nav-note"><span class="nav-icon">📜</span>NOTE</button>
   <button class="nav-btn" onclick="showPage('settings')" id="nav-settings"><span class="nav-icon">⚙️</span>SETTINGS</button>
 </nav>
 
 <div id="page-dashboard" class="page active">
-  <div class="page-header"><h1>🪓 BUILDING VIKINGS</h1><p id="dash-subtitle">WORKOUT TRACKER</p></div>
+  <div class="page-header"><h1 id="dash-title">🪓⚔️ IRON SAGA</h1><p id="dash-subtitle">WORKOUT TRACKER</p></div>
   <div id="dash-program-selector"></div>
   <div class="stats-grid" id="stats-grid"></div>
-  <div class="card"><div class="card-title">PROGRESSIONE</div><div class="dots-row" id="dots-row"></div></div>
+  <div class="card"><div class="card-title">Progressione</div><div id="progress-visual"></div></div>
   <div id="dash-suggested"></div>
+  <div id="dash-reserve"></div>
 </div>
 
 <div id="page-workout" class="page">
@@ -158,37 +336,43 @@ body{background:var(--bg-void);color:var(--text-primary);font-family:var(--font-
 </div>
 
 <div id="page-progressi" class="page">
-  <div class="page-header"><h1>📊 PROGRESSI</h1></div>
-  <div class="chart-wrap"><div class="chart-title">VOLUME PER SESSIONE</div><canvas id="chart-volume" height="160"></canvas></div>
-  <div class="chart-wrap"><div class="chart-title">SESSIONI COMPLETATE PER FASE</div><canvas id="chart-phases" height="140"></canvas></div>
+  <div class="page-header"><h1>📈 PROGRESSI</h1></div>
+  <div class="chart-wrap" id="fondamentali-wrap" style="display:none;">
+    <div class="chart-title">Fondamentali — Stima 1RM</div>
+    <div class="chart-subtitle">Formula di Epley · kg × (1 + reps/30) sul miglior set per sessione</div>
+    <div class="fondamentale-select" id="fnd-selector"></div>
+    <canvas id="chart-1rm" height="180"></canvas>
+  </div>
+  <div class="chart-wrap"><div class="chart-title">Volume per Sessione</div><canvas id="chart-volume" height="160"></canvas></div>
+  <div class="chart-wrap"><div class="chart-title">Sessioni Completate per Fase</div><canvas id="chart-phases" height="140"></canvas></div>
 </div>
 
 <div id="page-note" class="page">
-  <div class="page-header"><h1>📋 NOTE</h1></div>
+  <div class="page-header"><h1>📜 NOTE</h1></div>
   <div id="note-content"></div>
 </div>
 
 <div id="page-settings" class="page">
   <div class="page-header"><h1>⚙️ SETTINGS</h1></div>
   <div class="setting-row">
-    <div class="setting-label">ESPORTA DATI</div>
-    <div class="setting-desc">Scarica un backup JSON di tutti i log e progressi.</div>
+    <div class="setting-label">Esporta Dati</div>
+    <div class="setting-desc">Scarica un backup JSON di tutti i log, progressi e stato ciclico.</div>
     <button class="btn-secondary" onclick="exportData()">⬇ Esporta JSON</button>
   </div>
   <div class="setting-row">
-    <div class="setting-label">IMPORTA DATI</div>
-    <div class="setting-desc">Ripristina da un backup JSON precedentemente esportato.</div>
+    <div class="setting-label">Importa Dati</div>
+    <div class="setting-desc">Ripristina da un backup JSON. Compatibile anche con export di versioni precedenti.</div>
     <label class="file-label" for="import-file">📁 Scegli file JSON</label>
     <input type="file" id="import-file" class="file-input" accept=".json" onchange="importData(this)">
     <div id="import-feedback" class="import-feedback"></div>
   </div>
   <div class="setting-row">
-    <div class="setting-label">RESET LOG</div>
-    <div class="setting-desc">Azzera tutti i log di allenamento mantenendo il programma.</div>
+    <div class="setting-label">Reset Log</div>
+    <div class="setting-desc">Azzera tutti i log di allenamento mantenendo il programma e lo stato ciclico.</div>
     <button class="btn-danger" onclick="resetProgress()">⚠ Reset Progressi</button>
   </div>
   <div class="setting-row">
-    <div class="setting-label">RESET COMPLETO</div>
+    <div class="setting-label">Reset Completo</div>
     <div class="setting-desc">Elimina tutti i dati e ricomincia da zero.</div>
     <button class="btn-danger" onclick="resetAll()">⚠ Reset Totale</button>
   </div>
@@ -198,15 +382,13 @@ body{background:var(--bg-void);color:var(--text-primary);font-family:var(--font-
 
 <script>
 // ═══════════════════════════════════════════════════
-//  PROGRAMS
+//  PROGRAMS DATA
 // ═══════════════════════════════════════════════════
 
 const PROGRAMS = {
 
 "building_vikings": {
-  name: "Building Vikings",
-  shortName: "🪓 BV",
-  days: 18,
+  name: "Building Vikings", shortName: "🪓 BV", type:"finite", days: 18,
   schedule: [
     {day:1,session:"A",wave:"Prima ondata"},{day:2,session:"B",wave:"Prima ondata"},
     {day:3,session:"C",wave:"Prima ondata"},{day:4,session:"REST",wave:"Recupero attivo"},
@@ -218,340 +400,487 @@ const PROGRAMS = {
     {day:15,session:"C",wave:"Seconda ondata +5%"},{day:16,session:"REST",wave:"Recupero attivo"},
     {day:17,session:"B",wave:"Peak — volume max"},{day:18,session:"A",wave:"Peak — volume max"},
   ],
+  fondamentali:[
+    {label:"Back Squat", id:"A4a"},
+    {label:"Incline Bench Press", id:"B2a"},
+    {label:"T-Bar Row", id:"B4b"},
+    {label:"DB Overhead Press", id:"A5c"},
+  ],
   sessions: {
-    A: {
-      name:"Gambe / Spalle", emoji:"🦵", duration:"58–62 min",
+    A: { name:"Gambe / Spalle", emoji:"🦵", duration:"58–62 min",
       warmup:{title:"Warm-Up — Vogatore + Mobilità",time:"7 min",exercises:[
-        {name:"Vogatore",specs:"4 min — RPE 5"},
-        {name:"Hip Circle + Leg Swing",specs:"1×10 per lato"},
-        {name:"Goblet Squat con KB",specs:"2×6 con 2s hold al bottom"},
+        {name:"Vogatore",specs:"4 min — RPE 5"},{name:"Hip Circle + Leg Swing",specs:"1×10 per lato"},{name:"Goblet Squat con KB",specs:"2×6 con 2s hold al bottom"},
       ]},
       blocks:[
-        {id:"A1",num:"BLOCCO 1",title:"Attivazione Gluti & Catena Post. — SS",tag:"superset",
-         objective:"3 round · Rest 60s dopo ogni round",
+        {id:"A1",num:"BLOCCO 1",title:"Attivazione Gluti & Catena Post. — SS",tag:"superset",objective:"3 round · Rest 60s dopo ogni round",
          exercises:[
            {id:"A1a",letter:"1A",name:"Barbell Hip Thrust",sets:3,reps:"10",tut:"2s hold al top",rest:"→ 1B",note:"Carico moderato"},
            {id:"A1b",letter:"1B",name:"Barbell Good Morning",sets:3,reps:"8",tut:"3s eccentrica",rest:"60s",note:"Carico leggero, schiena neutra"},
          ]},
-        {id:"A2",num:"BLOCCO 2",title:"Quad Pre-Fatigue",tag:null,
-         objective:"Pre-affaticare il quadricipite prima dei compound",
-         exercises:[
-           {id:"A2a",letter:"2",name:"Leg Extension Machine",sets:3,reps:"20 totali",tut:"8×3s neg + 8×2s hold + 4 esp",rest:"45s",note:"Struttura: 8 reps 3s negative + 8 reps 2s hold al top + 4 reps esplosive"},
-         ]},
-        {id:"A3",num:"BLOCCO 3",title:"Compound Legs — TRI-SET",tag:"triset",
-         objective:"3 round · Rest 2 min tra i round",
+        {id:"A2",num:"BLOCCO 2",title:"Quad Pre-Fatigue",tag:null,objective:"Pre-affaticare il quadricipite prima dei compound",
+         exercises:[{id:"A2a",letter:"2",name:"Leg Extension Machine",sets:3,reps:"20 totali",tut:"8×3s neg + 8×2s hold + 4 esp",rest:"45s",note:"8 reps 3s negative + 8 reps 2s hold al top + 4 reps esplosive"}]},
+        {id:"A3",num:"BLOCCO 3",title:"Compound Legs — TRI-SET",tag:"triset",objective:"3 round · Rest 2 min tra i round",
          exercises:[
            {id:"A3a",letter:"3A",name:"Leg Press",sets:3,reps:"16 totali",tut:"8×3s neg + 8 esp",rest:"→ 3B",note:"Carico moderato-pesante, ROM completa"},
            {id:"A3b",letter:"3B",name:"Pulse Walking Lunges con Manubri",sets:3,reps:"20 passi",tut:"1 pulse per passo",rest:"→ 3C",note:"Mezzo affondo + affondo completo = 1 passo"},
            {id:"A3c",letter:"3C",name:"Stiff Leg RDL con Manubri",sets:3,reps:"10",tut:"3s eccentrica",rest:"2 min",note:"Carico leggero — hamstring in allungamento"},
          ]},
-        {id:"A4",num:"BLOCCO 4",title:"Strength Squat",tag:"compound",
-         objective:"Carico massimale · RPE 7-8",
-         exercises:[
-           {id:"A4a",letter:"4",name:"Safety Bar / Back Squat",sets:3,reps:"8",tut:"3s neg + 1s hold bottom",rest:"90s",note:"Prima ondata: 8RM tecnico → Seconda +5% → Peak +5%"},
-         ]},
-        {id:"A5",num:"BLOCCO 5",title:"Spalle",tag:null,
-         objective:"5 min transizione dopo gambe, poi spalle",
+        {id:"A4",num:"BLOCCO 4",title:"Strength Squat",tag:"compound",objective:"Carico massimale · RPE 7-8",
+         exercises:[{id:"A4a",letter:"4",name:"Safety Bar / Back Squat",sets:3,reps:"8",tut:"3s neg + 1s hold bottom",rest:"90s",note:"Prima ondata: 8RM tecnico → Seconda +5% → Peak +5%",anchor:true}]},
+        {id:"A5",num:"BLOCCO 5",title:"Spalle",tag:null,objective:"5 min transizione dopo gambe",
          exercises:[
            {id:"A5a",letter:"5A",name:"DB Bent-Over Lateral Raise",sets:4,reps:"12",tut:"2s hold al top",rest:"45s",note:null},
-           {id:"A5b",letter:"5B-1",name:"Cable Single-Arm Lateral Raise (SS)",sets:3,reps:"8 per lato",tut:"3s negative",rest:"→ OHP",note:"SS: Cable Lateral → immediato OHP · 3 round · rest 60s"},
+           {id:"A5b",letter:"5B-1",name:"Cable Single-Arm Lateral Raise (SS)",sets:3,reps:"8 per lato",tut:"3s negative",rest:"→ OHP",note:"SS con OHP · 3 round · rest 60s"},
            {id:"A5c",letter:"5B-2",name:"Dumbbell Overhead Press (SS)",sets:3,reps:"12",tut:null,rest:"60s",note:null},
          ]},
-      ]
-    },
-    B: {
-      name:"Petto / Dorso", emoji:"💪", duration:"58–63 min",
+      ]},
+    B: { name:"Petto / Dorso", emoji:"💪", duration:"58–63 min",
       warmup:{title:"Warm-Up — Vogatore + Mobilità Spalle",time:"7 min",exercises:[
-        {name:"Vogatore",specs:"4 min — moderato"},
-        {name:"Banded Pull-Apart",specs:"2×15"},
-        {name:"PVC Bench Press / Arm Circle",specs:"1×10 per lato"},
+        {name:"Vogatore",specs:"4 min — moderato"},{name:"Banded Pull-Apart",specs:"2×15"},{name:"PVC Bench Press / Arm Circle",specs:"1×10 per lato"},
       ]},
       blocks:[
-        {id:"B1",num:"BLOCCO 1",title:"Petto Pre-Fatigue (DB Anarchy)",tag:null,
-         objective:"Ispirato al protocollo DB Bench Press Anarchy — 90 Day Get Huge (Lipson)",
+        {id:"B1",num:"BLOCCO 1",title:"Petto Pre-Fatigue (DB Anarchy)",tag:null,objective:"Ispirato al protocollo 90 Day Get Huge (Lipson)",
+         exercises:[{id:"B1a",letter:"1",name:"DB Bench Press — 3 set selezionati",sets:3,reps:"20/12×3sneg/8+DS×15",tut:"vedi note",rest:"90s",note:"Set1: 20 reps blood flow. Set2: 12 reps 3s negative. Set3: 8+DS -30%×15. Registra carico Set2"}]},
+        {id:"B2",num:"BLOCCO 2",title:"Chest Compound Strength",tag:"compound",objective:"Massimo carico e TUT sul pettorale",
          exercises:[
-           {id:"B1a",letter:"1",name:"DB Bench Press — 3 set selezionati",sets:3,reps:"Set1:20 / Set2:12×3sneg / Set3:8+DS×15",tut:"vedi note",rest:"90s",note:"Set1: 20 reps blood flow. Set2: 12 reps 3s negative. Set3: 8 reps + DS -30%×15. Registra carico Set2."},
+           {id:"B2a",letter:"2A",name:"Incline Plate Loaded Bench Press",sets:4,reps:"8",tut:"3s negative",rest:"90s",note:"Carico pesante — RPE 8",anchor:true},
+           {id:"B2b",letter:"2B-1",name:"Incline DB Press — Pump (SS)",sets:3,reps:"15",tut:null,rest:"→ Barbell",note:"SS: DB 15 reps → Barbell Incline 8 reps 5s neg · 3 round · rest 90s"},
+           {id:"B2c",letter:"2B-2",name:"Barbell Incline Press — TUT (SS)",sets:3,reps:"8",tut:"5s negative",rest:"90s",note:"Spotter se disponibile"},
          ]},
-        {id:"B2",num:"BLOCCO 2",title:"Chest Compound Strength",tag:"compound",
-         objective:"Massimo carico e TUT sul pettorale",
-         exercises:[
-           {id:"B2a",letter:"2A",name:"Incline Plate Loaded Bench Press",sets:4,reps:"8",tut:"3s negative",rest:"90s",note:"Carico pesante — RPE 8"},
-           {id:"B2b",letter:"2B-1",name:"Incline DB Press — Pump (SS)",sets:3,reps:"15",tut:null,rest:"→ Barbell",note:"SS: Incline DB 15 reps → immediato Barbell Incline 8 reps 5s neg · 3 round · rest 90s"},
-           {id:"B2c",letter:"2B-2",name:"Barbell Incline Press — TUT (SS)",sets:3,reps:"8",tut:"5s negative",rest:"90s",note:"Usa spotter se disponibile"},
-         ]},
-        {id:"B3",num:"BLOCCO 3",title:"Chest Finisher — TRI-SET",tag:"triset",
-         objective:"3 round · Rest 90s",
+        {id:"B3",num:"BLOCCO 3",title:"Chest Finisher — TRI-SET",tag:"triset",objective:"3 round · Rest 90s",
          exercises:[
            {id:"B3a",letter:"3A",name:"Flat Dumbbell Fly",sets:3,reps:"8",tut:"eccentrica controllata",rest:"→ 3B",note:"ROM completa"},
            {id:"B3b",letter:"3B",name:"Neutral Grip DB Bench Press",sets:3,reps:"8",tut:"concentrica esplosiva",rest:"→ 3C",note:null},
            {id:"B3c",letter:"3C",name:"Dips",sets:3,reps:"AMRAP",tut:"cedimento tecnico",rest:"90s",note:"Stop al cedimento tecnico"},
          ]},
-        {id:"B4",num:"BLOCCO 4",title:"Dorso — Pulling Strength",tag:"compound",
-         objective:"Forza di trazione, spessore e larghezza",
+        {id:"B4",num:"BLOCCO 4",title:"Dorso — Pulling Strength",tag:"compound",objective:"Forza di trazione, spessore e larghezza",
          exercises:[
-           {id:"B4a",letter:"4A",name:"Reverse Grip Pulldown",sets:3,reps:"12 strutturate",tut:"4×3sneg + 4×3shold + 4 reg",rest:"30s",note:"4 reps 3s neg + 4 reps 3s hold bottom + 4 reps regolari"},
-           {id:"B4b",letter:"4B",name:"T-Bar Row",sets:3,reps:"15",tut:null,rest:"90s",note:"Carico moderato — pump"},
-           {id:"B4c",letter:"4C",name:"Wide Grip Pull-Up",sets:3,reps:"AMRAP",tut:"3s negative",rest:"90s",note:"Elastico se necessario per mantenere TUT"},
+           {id:"B4a",letter:"4A",name:"Reverse Grip Pulldown",sets:3,reps:"12 strutturate",tut:"4×3sneg+4×3shold+4reg",rest:"30s",note:"4 3s neg + 4 3s hold bottom + 4 regolari"},
+           {id:"B4b",letter:"4B",name:"T-Bar Row",sets:3,reps:"15",tut:null,rest:"90s",note:"Carico moderato — pump",anchor:true},
+           {id:"B4c",letter:"4C",name:"Wide Grip Pull-Up",sets:3,reps:"AMRAP",tut:"3s negative",rest:"90s",note:"Elastico se necessario"},
          ]},
-      ]
-    },
-    C: {
-      name:"Bicipiti / Tricipiti", emoji:"🔥", duration:"57–62 min",
+      ]},
+    C: { name:"Bicipiti / Tricipiti", emoji:"🔥", duration:"57–62 min",
       warmup:{title:"Warm-Up — Vogatore + Attivazione Braccia",time:"6 min",exercises:[
-        {name:"Vogatore",specs:"4 min — cadenza moderata"},
-        {name:"Banded Tricep Pushdown",specs:"2×15"},
-        {name:"Banded Bicep Curl",specs:"2×15"},
+        {name:"Vogatore",specs:"4 min — cadenza moderata"},{name:"Banded Tricep Pushdown",specs:"2×15"},{name:"Banded Bicep Curl",specs:"2×15"},
       ]},
       blocks:[
-        {id:"C1",num:"SS 1",title:"Pump & Blood Flow",tag:"superset",
-         objective:"Attivare le braccia e portare sangue prima del lavoro pesante",
+        {id:"C1",num:"SS 1",title:"Pump & Blood Flow",tag:"superset",objective:"Attivare le braccia e portare sangue",
          exercises:[
-           {id:"C1a",letter:"1A",name:"Rope Pushdown (Tricipiti)",sets:3,reps:"25/15/10+DS",tut:null,rest:"→ 1B",note:"Set3: DS immediato -30%×10"},
-           {id:"C1b",letter:"1B",name:"EZ Bar Spider Curl (Bicipiti)",sets:3,reps:"12/10/8+DS",tut:null,rest:"90s",note:"Set3: DS immediato -30%×8"},
+           {id:"C1a",letter:"1A",name:"Rope Pushdown (Tricipiti)",sets:3,reps:"25/15/10+DS",tut:null,rest:"→ 1B",note:"Set3: DS -30%×10"},
+           {id:"C1b",letter:"1B",name:"EZ Bar Spider Curl (Bicipiti)",sets:3,reps:"12/10/8+DS",tut:null,rest:"90s",note:"Set3: DS -30%×8"},
          ]},
-        {id:"C2",num:"SS 2",title:"TUT & Mechanical Overload",tag:"superset",
-         objective:"Volume ad alta intensità con overload eccentrico",
+        {id:"C2",num:"SS 2",title:"TUT & Mechanical Overload",tag:"superset",objective:"Volume ad alta intensità con overload eccentrico",
          exercises:[
-           {id:"C2a",letter:"2A",name:"Rolling Extension → Skull Crusher → CG Press",sets:3,reps:"8+8+8 = 24 tot",tut:"no stop tra movimenti",rest:"→ 2B",note:"8 rolling ext + 8 skull crusher + 8 CG press = 24 totali senza stop"},
-           {id:"C2b",letter:"2B",name:"Single Arm Curl con Hold → Double Arm Curl",sets:3,reps:"8/braccio + 8 bilaterali",tut:"isometrico braccio fermo",rest:"90s",note:"8 curl singoli per braccio (l'altro fermo) → immediato 8 curl bilaterali"},
+           {id:"C2a",letter:"2A",name:"Rolling Extension → Skull Crusher → CG Press",sets:3,reps:"8+8+8=24",tut:"no stop",rest:"→ 2B",note:"24 totali senza stop"},
+           {id:"C2b",letter:"2B",name:"Single Arm Curl con Hold → Double Arm Curl",sets:3,reps:"8/braccio+8bilat",tut:"isometrico",rest:"90s",note:"8 singoli per braccio → 8 bilaterali"},
          ]},
-        {id:"C3",num:"SS 3",title:"Eccentric Overload",tag:"superset",
-         objective:"Overload eccentrico — danno muscolare e TUT massimizzato",
+        {id:"C3",num:"SS 3",title:"Eccentric Overload",tag:"superset",objective:"Overload eccentrico — danno muscolare e TUT",
          exercises:[
            {id:"C3a",letter:"3A",name:"Dumbbell Skull Crusher",sets:3,reps:"10",tut:"3s negative",rest:"→ 3B",note:null},
-           {id:"C3b",letter:"3B",name:"Cheat Curl con Bilanciere",sets:3,reps:"8",tut:"3s negative in discesa",rest:"90s",note:"Leggero slancio per salire, 3s negative controllata in discesa"},
+           {id:"C3b",letter:"3B",name:"Cheat Curl con Bilanciere",sets:3,reps:"8",tut:"3s neg in discesa",rest:"90s",note:"Leggero slancio salita, controllo discesa"},
          ]},
-        {id:"C4",num:"TRI-SET FINALE",title:"Braccia — Finisher",tag:"triset",
-         objective:"Esaurimento finale, pump massimo · 3 round · Rest 90s",
+        {id:"C4",num:"TRI-SET FINALE",title:"Braccia — Finisher",tag:"triset",objective:"3 round · Rest 90s",
          exercises:[
            {id:"C4a",letter:"A",name:"Dumbbell Kickback (Tricipiti)",sets:3,reps:"10",tut:"2s hold al top",rest:"→ B",note:null},
            {id:"C4b",letter:"B",name:"Incline DB Curl Alternato con Static Hold",sets:3,reps:"8 per braccio",tut:null,rest:"→ C",note:null},
-           {id:"C4c",letter:"C",name:"Double Contraction Dips",sets:3,reps:"AMRAP",tut:"½ROM up → full rep",rest:"90s",note:"Stop al cedimento tecnico"},
+           {id:"C4c",letter:"C",name:"Double Contraction Dips",sets:3,reps:"AMRAP",tut:"½ROM up→full",rest:"90s",note:"Stop al cedimento"},
          ]},
-      ]
-    }
+      ]},
   },
   notes: [
-    {h:"LEGENDA TECNICHE",rows:[
-      ["TUT","Time Under Tension — tempi come eccentrica/pausa/concentrica"],
-      ["3s-neg","3 secondi di fase eccentrica"],
-      ["hold","Pausa isometrica al picco contrazione o al bottom"],
-      ["SS","Superset — due esercizi back-to-back senza riposo"],
-      ["TRI","Tri-Set — tre esercizi back-to-back senza riposo"],
-      ["DS","Drop Set — riduci carico ~20-30% e continua"],
-      ["RPE","Rate of Perceived Exertion — scala 1-10"],
-      ["AMRAP","As Many Reps As Possible"],
-      ["8×8","Protocollo 90 Day Get Huge (Lipson): 8 set × 8 reps, 30s rest, 3s neg"],
+    {h:"Legenda Tecniche",rows:[
+      ["TUT","Time Under Tension"],["3s-neg","3 secondi di eccentrica"],["hold","Pausa isometrica"],
+      ["SS","Superset"],["TRI","Tri-Set"],["DS","Drop Set -20/30%"],["RPE","Scala 1-10"],["AMRAP","As Many Reps As Possible"],
+      ["8×8","Protocollo 90 Day Get Huge (Lipson)"],
     ]},
-    {h:"PROGRESSIONE CARICO",rows:[
-      ["Ondata 1","Stabilisci i carichi di riferimento · tecnica prioritaria"],
-      ["Ondata 2","+5% sui compound principali · +1 rep sugli isolamenti"],
-      ["Peak","+5% ulteriore sui compound · RPE max 8.5"],
-    ]},
-    {h:"NOTE IMPORTANTI",body:"1. Tecnica prima del carico. Se si rompe, riduci senza esitazione.\n2. Il vogatore nel warm-up non è opzionale.\n3. RPE 8 = ne avresti ancora 2 nel serbatoio. Non andare a cedimento sui compound.\n4. I tempi per sessione sono stime. Se superi 62 min, riduci i round del tri-set.\n5. Su 18 giorni, +5% composto è già un risultato eccellente."},
+    {h:"Note Importanti",body:"1. Tecnica prima del carico.\n2. Il vogatore nel warm-up non è opzionale.\n3. RPE 8 = ne avresti ancora 2 nel serbatoio.\n4. Se superi 62 min, riduci i round del tri-set.\n5. +5% composto su 18 giorni è già un risultato eccellente."},
   ]
 },
 
 "iron_nomad": {
-  name: "Iron Nomad",
-  shortName: "🏋️ IN",
-  days: 8,
+  name: "Iron Nomad", shortName: "🏋️ IN", type:"finite", days: 8,
   schedule: [
     {day:1,session:"D",wave:"Lower Body"},{day:2,session:"E",wave:"Push"},
     {day:3,session:"F",wave:"Pull"},{day:4,session:"REST",wave:"Recupero"},
     {day:5,session:"D",wave:"Lower Body +5%"},{day:6,session:"E",wave:"Push +5%"},
     {day:7,session:"F",wave:"Pull +5%"},{day:8,session:"G",wave:"Full Body"},
   ],
+  fondamentali:[
+    {label:"DB Bulgarian Split Squat", id:"D2a"},
+    {label:"DB Bench Press", id:"E2a"},
+    {label:"DB Romanian Deadlift", id:"F1a"},
+    {label:"DB Thruster", id:"G1a"},
+  ],
   sessions: {
-    D: {
-      name:"Lower Body", emoji:"🦵", duration:"~60 min",
+    D: { name:"Lower Body", emoji:"🦵", duration:"~60 min",
       warmup:{title:"Warm-Up — Attivazione Lower Body",time:"5 min",exercises:[
-        {name:"Jumping Jack",specs:"30 secondi"},
-        {name:"Hip Circle",specs:"10 per lato"},
-        {name:"Goblet Squat a corpo libero",specs:"10 reps con 2s hold al bottom"},
-        {name:"Leg Swing",specs:"10 per lato"},
-        {name:"Glute Bridge a corpo libero",specs:"15 reps con 2s hold al top"},
+        {name:"Jumping Jack",specs:"30 secondi"},{name:"Hip Circle",specs:"10 per lato"},{name:"Goblet Squat a corpo libero",specs:"10 reps con 2s hold al bottom"},{name:"Leg Swing",specs:"10 per lato"},{name:"Glute Bridge a corpo libero",specs:"15 reps con 2s hold al top"},
       ]},
       blocks:[
-        {id:"D1",num:"BLOCCO 1",title:"SS Gluti & Quad Pre-Fatigue",tag:"superset",
-         objective:"3 round · Rest 60s dopo ogni round",
+        {id:"D1",num:"BLOCCO 1",title:"SS Gluti & Quad Pre-Fatigue",tag:"superset",objective:"3 round · Rest 60s",
          exercises:[
-           {id:"D1a",letter:"1A",name:"DB Romanian Deadlift",sets:3,reps:"10",tut:"3s negative",rest:"→ 1B",note:"Schiena neutra · stretch hamstring"},
-           {id:"D1b",letter:"1B",name:"DB Goblet Squat",sets:3,reps:"12",tut:"2s hold al bottom",rest:"60s",note:"Talloni a terra · petto alto"},
+           {id:"D1a",letter:"1A",name:"DB Romanian Deadlift",sets:3,reps:"10",tut:"3s negative",rest:"→ 1B",note:"Schiena neutra"},
+           {id:"D1b",letter:"1B",name:"DB Goblet Squat",sets:3,reps:"12",tut:"2s hold al bottom",rest:"60s",note:"Talloni a terra"},
          ]},
-        {id:"D2",num:"BLOCCO 2",title:"Quad Strength",tag:"compound",
-         objective:"4 set per gamba · Rest 90s",
+        {id:"D2",num:"BLOCCO 2",title:"Quad Strength",tag:"compound",objective:"4 set per gamba · Rest 90s",
+         exercises:[{id:"D2a",letter:"2",name:"DB Bulgarian Split Squat",sets:4,reps:"10 per gamba",tut:"3s eccentrica",rest:"90s",note:"Piede posteriore su panca",anchor:true}]},
+        {id:"D3",num:"BLOCCO 3",title:"TRI-SET Posterior Chain",tag:"triset",objective:"3 round · Rest 90s",
          exercises:[
-           {id:"D2a",letter:"2",name:"DB Bulgarian Split Squat",sets:4,reps:"10 per gamba",tut:"3s eccentrica",rest:"90s",note:"Piede posteriore su panca · DB ai fianchi · ginocchio anteriore stabile"},
+           {id:"D3a",letter:"3A",name:"DB Stiff Leg RDL",sets:3,reps:"10",tut:"3s negative",rest:"→ 3B",note:"Carico leggero"},
+           {id:"D3b",letter:"3B",name:"DB Sumo Squat Pulse",sets:3,reps:"20",tut:null,rest:"→ 3C",note:null},
+           {id:"D3c",letter:"3C",name:"Single Leg Glute Bridge con DB",sets:3,reps:"12 per gamba",tut:"2s hold al top",rest:"90s",note:null},
          ]},
-        {id:"D3",num:"BLOCCO 3",title:"TRI-SET Posterior Chain",tag:"triset",
-         objective:"3 round · Rest 90s",
+        {id:"D4",num:"BLOCCO 4",title:"Core Finisher SS",tag:"superset",objective:"3 round · Rest 45s",
          exercises:[
-           {id:"D3a",letter:"3A",name:"DB Stiff Leg RDL",sets:3,reps:"10",tut:"3s negative",rest:"→ 3B",note:"Carico leggero · ROM massima"},
-           {id:"D3b",letter:"3B",name:"DB Sumo Squat Pulse",sets:3,reps:"20",tut:null,rest:"→ 3C",note:"Mezzo squat pulsante · DB verticale al centro"},
-           {id:"D3c",letter:"3C",name:"Single Leg Glute Bridge con DB",sets:3,reps:"12 per gamba",tut:"2s hold al top",rest:"90s",note:"DB sull'anca · piede controlaterale sollevato"},
+           {id:"D4a",letter:"4A",name:"DB Suitcase Carry (statico)",sets:3,reps:"30s per lato",tut:null,rest:"→ 4B",note:null},
+           {id:"D4b",letter:"4B",name:"Hollow Body Hold",sets:3,reps:"20-30s",tut:null,rest:"45s",note:null},
          ]},
-        {id:"D4",num:"BLOCCO 4",title:"Core Finisher SS",tag:"superset",
-         objective:"3 round · Rest 45s",
+        {id:"DHIIT",num:"⚡ HIIT",title:"GRASSHOPPER — 5 Round For Time",tag:"hiit",objective:"Nota il tempo totale",
          exercises:[
-           {id:"D4a",letter:"4A",name:"DB Suitcase Carry (statico)",sets:3,reps:"30s per lato",tut:null,rest:"→ 4B",note:"DB pesante · torso verticale"},
-           {id:"D4b",letter:"4B",name:"Hollow Body Hold",sets:3,reps:"20-30s",tut:null,rest:"45s",note:"Lombare a terra · gambe e braccia estese"},
+           {id:"DHa",letter:"A",name:"DB Goblet Squat (HIIT)",sets:5,reps:"15",tut:null,rest:"no",note:null},
+           {id:"DHb",letter:"B",name:"Burpee",sets:5,reps:"10",tut:null,rest:"no",note:null},
+           {id:"DHc",letter:"C",name:"DB Walking Lunge",sets:5,reps:"20 passi",tut:null,rest:"no",note:null},
+           {id:"DHd",letter:"D",name:"Mountain Climber",sets:5,reps:"20 (10/lato)",tut:null,rest:"tra i round",note:null},
          ]},
-        {id:"DHIIT",num:"⚡ HIIT",title:"GRASSHOPPER — 5 Round For Time",tag:"hiit",
-         objective:"Completa 5 round nel minor tempo possibile · Nota il tempo totale",
-         exercises:[
-           {id:"DHa",letter:"A",name:"DB Goblet Squat (HIIT)",sets:5,reps:"15",tut:null,rest:"no",note:"Carico leggero · ritmo sostenuto"},
-           {id:"DHb",letter:"B",name:"Burpee",sets:5,reps:"10",tut:null,rest:"no",note:"Full ROM · no pausa"},
-           {id:"DHc",letter:"C",name:"DB Walking Lunge",sets:5,reps:"20 passi",tut:null,rest:"no",note:"Passi continui e fluidi"},
-           {id:"DHd",letter:"D",name:"Mountain Climber",sets:5,reps:"20 (10/lato)",tut:null,rest:"tra i round",note:"Ritmo alto · core attivo"},
-         ]},
-      ]
-    },
-    E: {
-      name:"Push (Petto/Spalle/Tricipiti)", emoji:"💪", duration:"~60 min",
+      ]},
+    E: { name:"Push (Petto/Spalle/Tricipiti)", emoji:"💪", duration:"~60 min",
       warmup:{title:"Warm-Up — Attivazione Push",time:"5 min",exercises:[
-        {name:"Arm Circle (avanti/indietro)",specs:"15 per direzione"},
-        {name:"DB Lateral Raise leggero",specs:"2×12"},
-        {name:"Push-Up a corpo libero",specs:"2×10"},
-        {name:"DB Floor Press leggero",specs:"2×10"},
+        {name:"Arm Circle",specs:"15 per direzione"},{name:"DB Lateral Raise leggero",specs:"2×12"},{name:"Push-Up a corpo libero",specs:"2×10"},{name:"DB Floor Press leggero",specs:"2×10"},
       ]},
       blocks:[
-        {id:"E1",num:"BLOCCO 1",title:"Chest Pre-Fatigue (DB Fly Anarchy)",tag:null,
-         objective:"Ispirato al protocollo 90 Day Get Huge (Lipson)",
+        {id:"E1",num:"BLOCCO 1",title:"Chest Pre-Fatigue (DB Fly Anarchy)",tag:null,objective:"Protocollo 90 Day Get Huge",
+         exercises:[{id:"E1a",letter:"1",name:"DB Floor Fly — 3 set",sets:3,reps:"15/10×3sneg/8+DS×12",tut:"vedi note",rest:"90s",note:"Set1:15 blood flow. Set2:10×3sneg. Set3:8+DS-30%×12"}]},
+        {id:"E2",num:"BLOCCO 2",title:"Chest Strength SS",tag:"superset",objective:"4 round · Rest 90s",
          exercises:[
-           {id:"E1a",letter:"1",name:"DB Floor Fly — 3 set",sets:3,reps:"Set1:15 / Set2:10×3sneg / Set3:8+DS×12",tut:"vedi note",rest:"90s",note:"Set1: 15 reps blood flow. Set2: 10 reps 3s negative. Set3: 8 reps + DS -30%×12"},
+           {id:"E2a",letter:"2A",name:"DB Bench Press",sets:4,reps:"8",tut:"3s negative",rest:"→ 2B",note:"RPE 8",anchor:true},
+           {id:"E2b",letter:"2B",name:"DB Incline Bench Press",sets:4,reps:"12",tut:"2s hold al bottom",rest:"90s",note:null},
          ]},
-        {id:"E2",num:"BLOCCO 2",title:"Chest Strength SS",tag:"superset",
-         objective:"4 round · Rest 90s",
+        {id:"E3",num:"BLOCCO 3",title:"Shoulders TRI-SET",tag:"triset",objective:"3 round · Rest 90s",
          exercises:[
-           {id:"E2a",letter:"2A",name:"DB Bench Press",sets:4,reps:"8",tut:"3s negative",rest:"→ 2B",note:"RPE 8 · su panca"},
-           {id:"E2b",letter:"2B",name:"DB Incline Bench Press",sets:4,reps:"12",tut:"2s hold al bottom",rest:"90s",note:"Panca inclinata"},
-         ]},
-        {id:"E3",num:"BLOCCO 3",title:"Shoulders TRI-SET",tag:"triset",
-         objective:"3 round · Rest 90s",
-         exercises:[
-           {id:"E3a",letter:"3A",name:"DB Seated Overhead Press",sets:3,reps:"10",tut:null,rest:"→ 3B",note:"Seduto · schiena neutra"},
-           {id:"E3b",letter:"3B",name:"DB Bent-Over Lateral Raise",sets:3,reps:"12",tut:"2s hold al top",rest:"→ 3C",note:"Busto inclinato ~45°"},
+           {id:"E3a",letter:"3A",name:"DB Seated Overhead Press",sets:3,reps:"10",tut:null,rest:"→ 3B",note:null},
+           {id:"E3b",letter:"3B",name:"DB Bent-Over Lateral Raise",sets:3,reps:"12",tut:"2s hold al top",rest:"→ 3C",note:null},
            {id:"E3c",letter:"3C",name:"DB Front Raise alternato",sets:3,reps:"10 per braccio",tut:null,rest:"90s",note:null},
          ]},
-        {id:"E4",num:"BLOCCO 4",title:"Triceps Finisher SS",tag:"superset",
-         objective:"3 round · Rest 60s",
+        {id:"E4",num:"BLOCCO 4",title:"Triceps Finisher SS",tag:"superset",objective:"3 round · Rest 60s",
          exercises:[
-           {id:"E4a",letter:"4A",name:"DB Skull Crusher",sets:3,reps:"10",tut:"3s negative",rest:"→ 4B",note:"Su panca · gomiti fissi"},
-           {id:"E4b",letter:"4B",name:"DB Close Grip Floor Press",sets:3,reps:"12",tut:"concentrica esplosiva",rest:"60s",note:"Manubri paralleli"},
+           {id:"E4a",letter:"4A",name:"DB Skull Crusher",sets:3,reps:"10",tut:"3s negative",rest:"→ 4B",note:null},
+           {id:"E4b",letter:"4B",name:"DB Close Grip Floor Press",sets:3,reps:"12",tut:"esplosiva",rest:"60s",note:null},
          ]},
-        {id:"EHIIT",num:"⚡ HIIT",title:"THOR'S HAMMER — EMOM 20 min",tag:"hiit",
-         objective:"Minuti dispari: Push Press + Dip · Minuti pari: Push-Up + Lateral Raise",
+        {id:"EHIIT",num:"⚡ HIIT",title:"THOR'S HAMMER — EMOM 20 min",tag:"hiit",objective:"Dispari: Push Press+Dip · Pari: Push-Up+Lateral",
          exercises:[
-           {id:"EHa",letter:"dispari",name:"DB Push Press",sets:10,reps:"12",tut:null,rest:"EMOM",note:"Leggera spinta gambe · overhead completo"},
-           {id:"EHb",letter:"dispari",name:"Tricep Dip su panca",sets:10,reps:"8",tut:null,rest:"EMOM",note:"ROM completa · gomiti vicini al corpo"},
-           {id:"EHc",letter:"pari",name:"Push-Up",sets:10,reps:"15",tut:null,rest:"EMOM",note:"Petto a terra · full ROM"},
-           {id:"EHd",letter:"pari",name:"DB Lateral Raise",sets:10,reps:"10",tut:"2s hold al top",rest:"EMOM",note:"Carico leggero"},
+           {id:"EHa",letter:"dispari",name:"DB Push Press",sets:10,reps:"12",tut:null,rest:"EMOM",note:null},
+           {id:"EHb",letter:"dispari",name:"Tricep Dip su panca",sets:10,reps:"8",tut:null,rest:"EMOM",note:null},
+           {id:"EHc",letter:"pari",name:"Push-Up",sets:10,reps:"15",tut:null,rest:"EMOM",note:null},
+           {id:"EHd",letter:"pari",name:"DB Lateral Raise",sets:10,reps:"10",tut:"2s hold",rest:"EMOM",note:null},
          ]},
-      ]
-    },
-    F: {
-      name:"Pull / Posterior Chain", emoji:"🔗", duration:"~60 min",
+      ]},
+    F: { name:"Pull / Posterior Chain", emoji:"🔗", duration:"~60 min",
       warmup:{title:"Warm-Up — Attivazione Pull",time:"5 min",exercises:[
-        {name:"Cat-Cow",specs:"10 reps"},
-        {name:"DB Deadlift leggero",specs:"2×10"},
-        {name:"DB Bent-Over Row leggero",specs:"2×12"},
-        {name:"DB Pull-Apart",specs:"2×15"},
+        {name:"Cat-Cow",specs:"10 reps"},{name:"DB Deadlift leggero",specs:"2×10"},{name:"DB Bent-Over Row leggero",specs:"2×12"},{name:"DB Pull-Apart",specs:"2×15"},
       ]},
       blocks:[
-        {id:"F1",num:"BLOCCO 1",title:"Hinge Strength",tag:"compound",
-         objective:"4 set · Rest 90s · RPE 8",
+        {id:"F1",num:"BLOCCO 1",title:"Hinge Strength",tag:"compound",objective:"4 set · Rest 90s · RPE 8",
+         exercises:[{id:"F1a",letter:"1",name:"DB Romanian Deadlift",sets:4,reps:"8",tut:"3s negative",rest:"90s",note:"Massimo stretch",anchor:true}]},
+        {id:"F2",num:"BLOCCO 2",title:"Row Superset",tag:"superset",objective:"4 round · Rest 90s",
          exercises:[
-           {id:"F1a",letter:"1",name:"DB Romanian Deadlift",sets:4,reps:"8",tut:"3s negative",rest:"90s",note:"Massimo stretch hamstring · RPE 8"},
+           {id:"F2a",letter:"2A",name:"DB Bent-Over Row",sets:4,reps:"10",tut:"2s hold al top",rest:"→ 2B",note:null},
+           {id:"F2b",letter:"2B",name:"DB Single Arm Row",sets:4,reps:"10 per lato",tut:"2s hold al top",rest:"90s",note:null},
          ]},
-        {id:"F2",num:"BLOCCO 2",title:"Row Superset",tag:"superset",
-         objective:"4 round · Rest 90s",
+        {id:"F3",num:"BLOCCO 3",title:"Biceps TUT TRI-SET",tag:"triset",objective:"3 round · Rest 90s",
          exercises:[
-           {id:"F2a",letter:"2A",name:"DB Bent-Over Row (bilaterale)",sets:4,reps:"10",tut:"2s hold al top",rest:"→ 2B",note:"Gomiti lungo i fianchi · focus lat"},
-           {id:"F2b",letter:"2B",name:"DB Single Arm Row",sets:4,reps:"10 per lato",tut:"2s hold al top",rest:"90s",note:"Su panca · gomiti alti · focus romboidi"},
+           {id:"F3a",letter:"3A",name:"DB Incline Curl alternato",sets:3,reps:"10 per braccio",tut:null,rest:"→ 3B",note:null},
+           {id:"F3b",letter:"3B",name:"DB Hammer Curl",sets:3,reps:"12",tut:null,rest:"→ 3C",note:null},
+           {id:"F3c",letter:"3C",name:"DB Concentration Curl",sets:3,reps:"8",tut:"3sneg+2shold",rest:"90s",note:null},
          ]},
-        {id:"F3",num:"BLOCCO 3",title:"Biceps TUT TRI-SET",tag:"triset",
-         objective:"3 round · Rest 90s",
+        {id:"F4",num:"BLOCCO 4",title:"Posterior Chain Finisher SS",tag:"superset",objective:"3 round · Rest 60s",
          exercises:[
-           {id:"F3a",letter:"3A",name:"DB Incline Curl alternato",sets:3,reps:"10 per braccio",tut:"massimo stretch alla base",rest:"→ 3B",note:"Panca inclinata"},
-           {id:"F3b",letter:"3B",name:"DB Hammer Curl",sets:3,reps:"12",tut:null,rest:"→ 3C",note:"Brachiale e brachioradiale"},
-           {id:"F3c",letter:"3C",name:"DB Concentration Curl",sets:3,reps:"8",tut:"3s neg + 2s hold top",rest:"90s",note:"Gomito sul ginocchio"},
+           {id:"F4a",letter:"4A",name:"DB Good Morning",sets:3,reps:"12",tut:"3s negative",rest:"→ 4B",note:null},
+           {id:"F4b",letter:"4B",name:"DB Hip Hinge Reverse Fly",sets:3,reps:"12",tut:"2s hold al top",rest:"60s",note:null},
          ]},
-        {id:"F4",num:"BLOCCO 4",title:"Posterior Chain Finisher SS",tag:"superset",
-         objective:"3 round · Rest 60s",
+        {id:"FHIIT",num:"⚡ HIIT",title:"ODIN'S WRATH — 4 AMRAP 4'/1'",tag:"hiit",objective:"Conta le reps totali",
          exercises:[
-           {id:"F4a",letter:"4A",name:"DB Good Morning",sets:3,reps:"12",tut:"3s negative",rest:"→ 4B",note:"Carico leggero · catena posteriore in allungamento"},
-           {id:"F4b",letter:"4B",name:"DB Hip Hinge Reverse Fly",sets:3,reps:"12",tut:"2s hold al top",rest:"60s",note:"Busto parallelo al suolo · braccia aperte lateralmente"},
+           {id:"FHa",letter:"A",name:"DB Deadlift (AMRAP)",sets:4,reps:"8/round",tut:null,rest:"AMRAP",note:null},
+           {id:"FHb",letter:"B",name:"DB Bent-Over Row (AMRAP)",sets:4,reps:"8/round",tut:null,rest:"AMRAP",note:null},
+           {id:"FHc",letter:"C",name:"DB Curl (AMRAP)",sets:4,reps:"10/round",tut:null,rest:"1min",note:null},
          ]},
-        {id:"FHIIT",num:"⚡ HIIT",title:"ODIN'S WRATH — 4 AMRAP 4'/1'",tag:"hiit",
-         objective:"4 round da 4 min AMRAP + 1 min rest · Conta le reps totali",
-         exercises:[
-           {id:"FHa",letter:"A",name:"DB Deadlift (AMRAP)",sets:4,reps:"8 target per round",tut:null,rest:"nel ciclo AMRAP",note:"Peso moderato · forma prioritaria"},
-           {id:"FHb",letter:"B",name:"DB Bent-Over Row (AMRAP)",sets:4,reps:"8 target per round",tut:null,rest:"nel ciclo AMRAP",note:"Gomiti lungo i fianchi"},
-           {id:"FHc",letter:"C",name:"DB Curl (AMRAP)",sets:4,reps:"10 target per round",tut:null,rest:"1 min poi prossimo round",note:"Contrai al top"},
-         ]},
-      ]
-    },
-    G: {
-      name:"Full Body Conditioning", emoji:"⚡", duration:"~60 min",
+      ]},
+    G: { name:"Full Body Conditioning", emoji:"⚡", duration:"~60 min",
       warmup:{title:"Warm-Up — Full Body",time:"5 min",exercises:[
-        {name:"Jumping Jack",specs:"30 secondi"},
-        {name:"Inchworm",specs:"5 reps"},
-        {name:"DB Thruster leggero",specs:"2×8"},
-        {name:"Hip Hinge a corpo libero",specs:"2×10"},
+        {name:"Jumping Jack",specs:"30 secondi"},{name:"Inchworm",specs:"5 reps"},{name:"DB Thruster leggero",specs:"2×8"},{name:"Hip Hinge a corpo libero",specs:"2×10"},
       ]},
       blocks:[
-        {id:"G1",num:"BLOCCO 1",title:"Full Body Compound SS",tag:"superset",
-         objective:"4 round · Rest 90s",
+        {id:"G1",num:"BLOCCO 1",title:"Full Body Compound SS",tag:"superset",objective:"4 round · Rest 90s",
          exercises:[
-           {id:"G1a",letter:"1A",name:"DB Thruster (Squat + OHP)",sets:4,reps:"10",tut:null,rest:"→ 1B",note:"Movimento fluido e continuo · carico moderato"},
-           {id:"G1b",letter:"1B",name:"DB Romanian Deadlift",sets:4,reps:"10",tut:"3s negative",rest:"90s",note:"Catena posteriore"},
+           {id:"G1a",letter:"1A",name:"DB Thruster",sets:4,reps:"10",tut:null,rest:"→ 1B",note:"Squat + OHP",anchor:true},
+           {id:"G1b",letter:"1B",name:"DB Romanian Deadlift",sets:4,reps:"10",tut:"3s negative",rest:"90s",note:null},
          ]},
-        {id:"G2",num:"BLOCCO 2",title:"Push/Pull Superset",tag:"superset",
-         objective:"3 round · Rest 90s",
+        {id:"G2",num:"BLOCCO 2",title:"Push/Pull Superset",tag:"superset",objective:"3 round · Rest 90s",
          exercises:[
-           {id:"G2a",letter:"2A",name:"DB Floor Press",sets:3,reps:"12",tut:"3s negative",rest:"→ 2B",note:"Full ROM"},
+           {id:"G2a",letter:"2A",name:"DB Floor Press",sets:3,reps:"12",tut:"3s negative",rest:"→ 2B",note:null},
            {id:"G2b",letter:"2B",name:"DB Bent-Over Row",sets:3,reps:"12",tut:"2s hold al top",rest:"90s",note:null},
          ]},
-        {id:"G3",num:"BLOCCO 3",title:"TRI-SET Unilaterale",tag:"triset",
-         objective:"3 round · Rest 90s",
+        {id:"G3",num:"BLOCCO 3",title:"TRI-SET Unilaterale",tag:"triset",objective:"3 round · Rest 90s",
          exercises:[
-           {id:"G3a",letter:"3A",name:"DB Single Leg RDL",sets:3,reps:"8 per gamba",tut:null,rest:"→ 3B",note:"Equilibrio e catena posteriore"},
-           {id:"G3b",letter:"3B",name:"DB Single Arm Press (in piedi)",sets:3,reps:"10 per braccio",tut:null,rest:"→ 3C",note:"Core anti-rotazione"},
-           {id:"G3c",letter:"3C",name:"DB Suitcase Squat",sets:3,reps:"12",tut:null,rest:"90s",note:"DB su un solo lato · torso verticale"},
+           {id:"G3a",letter:"3A",name:"DB Single Leg RDL",sets:3,reps:"8 per gamba",tut:null,rest:"→ 3B",note:null},
+           {id:"G3b",letter:"3B",name:"DB Single Arm Press",sets:3,reps:"10 per braccio",tut:null,rest:"→ 3C",note:null},
+           {id:"G3c",letter:"3C",name:"DB Suitcase Squat",sets:3,reps:"12",tut:null,rest:"90s",note:null},
          ]},
-        {id:"G4",num:"BLOCCO 4",title:"Carries & Core",tag:null,
-         objective:"3 round · Rest 60s",
+        {id:"G4",num:"BLOCCO 4",title:"Carries & Core",tag:null,objective:"3 round · Rest 60s",
          exercises:[
-           {id:"G4a",letter:"4A",name:"DB Farmer Carry",sets:3,reps:"20m / 20s",tut:null,rest:"→ 4B",note:"Entrambe le mani · passi controllati"},
-           {id:"G4b",letter:"4B",name:"DB Overhead Carry (un braccio)",sets:3,reps:"20m per lato",tut:null,rest:"60s",note:"Braccio verticale · core stabile"},
+           {id:"G4a",letter:"4A",name:"DB Farmer Carry",sets:3,reps:"20m/20s",tut:null,rest:"→ 4B",note:null},
+           {id:"G4b",letter:"4B",name:"DB Overhead Carry",sets:3,reps:"20m per lato",tut:null,rest:"60s",note:null},
          ]},
-        {id:"GHIIT",num:"⚡ HIIT",title:"RAGNARÖK — Death By",tag:"hiit",
-         objective:"Ogni minuto aggiungi 1 rep · Punteggio = ultimo minuto completato",
+        {id:"GHIIT",num:"⚡ HIIT",title:"RAGNARÖK — Death By",tag:"hiit",objective:"Punteggio = ultimo minuto completato",
          exercises:[
-           {id:"GHa",letter:"A",name:"DB Thruster (Death By)",sets:20,reps:"+1/min (da 1)",tut:null,rest:"EMOM",note:"Carico leggero · punteggio = ultimo minuto completato"},
-           {id:"GHb",letter:"B",name:"Burpee (Death By)",sets:20,reps:"+1/min (da 1)",tut:null,rest:"EMOM",note:"Full ROM"},
+           {id:"GHa",letter:"A",name:"DB Thruster (Death By)",sets:20,reps:"+1/min",tut:null,rest:"EMOM",note:null},
+           {id:"GHb",letter:"B",name:"Burpee (Death By)",sets:20,reps:"+1/min",tut:null,rest:"EMOM",note:null},
          ]},
-      ]
-    }
+      ]},
   },
   notes: [
-    {h:"ATTREZZATURA",rows:[
-      ["Manubri","Esercizi principali e isolamento"],
-      ["Panca","Bench press, incline, skull crusher, dip"],
-      ["Corpo libero","Burpee, push-up, mountain climber, hollow body, dip"],
-    ]},
-    {h:"STRUTTURA SESSIONI",rows:[
-      ["Riscaldamento","5 minuti · attivazione specifica per la sessione"],
-      ["Ipertrofia/Forza","35 minuti · TUT, superset, tri-set"],
-      ["HIIT/CrossFit","20 minuti · benchmark misurabile ogni sessione"],
-    ]},
-    {h:"BENCHMARK HIIT",rows:[
-      ["Grasshopper","Tempo totale 5 round (lower = migliore)"],
-      ["Thor's Hammer","EMOM 20min — scala reps se non tieni il minuto"],
-      ["Odin's Wrath","Reps totali 4 AMRAP (higher = megliore)"],
-      ["Ragnarök","Ultimo minuto completato (higher = migliore)"],
-    ]},
+    {h:"Attrezzatura",rows:[["Manubri","Esercizi principali e isolamento"],["Panca","Bench, incline, skull crusher, dip"],["Corpo libero","Burpee, push-up, mountain climber, dip"]]},
+    {h:"Struttura Sessioni",rows:[["Riscaldamento","5 minuti"],["Ipertrofia/Forza","35 minuti"],["HIIT/CrossFit","20 minuti — benchmark misurabile"]]},
+    {h:"Benchmark HIIT",rows:[["Grasshopper","Tempo totale 5 round (lower=meglio)"],["Thor's Hammer","EMOM 20min"],["Odin's Wrath","Reps totali (higher=meglio)"],["Ragnarök","Ultimo minuto completato (higher=meglio)"]]},
+  ]
+},
+"iron_saga": {
+  name: "Iron Saga", shortName: "⚔️ IS", type:"cyclic",
+  rotation:["Push","Pull","Legs"],
+  weeksPerBlock:4,
+  phaseOrder:["hypertrophy","strength","conditioning"],
+  phaseInfo:{
+    hypertrophy:{label:"Hypertrophy", emoji:"🔨", color:"hypertrophy"},
+    strength:{label:"Strength", emoji:"⚡", color:"strength"},
+    conditioning:{label:"Conditioning", emoji:"🌊", color:"conditioning"},
+  },
+  fondamentali:[
+    {label:"Back Squat", anchorKey:"backSquat"},
+    {label:"Bench Press", anchorKey:"benchPress"},
+    {label:"Deadlift", anchorKey:"deadlift"},
+    {label:"Overhead Press", anchorKey:"ohp"},
+    {label:"Weighted Pull-Up", anchorKey:"pullup", bodyweight:true},
+  ],
+  sessions: {
+    Push: {
+      emoji:"🔴", name:"Push — Petto/Spalle/Tricipiti",
+      hypertrophy:{ duration:"~55 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"2' ritmo leggero"},{name:"Arm Circle",specs:"15 per direzione"},{name:"Push-up lento",specs:"2×8 attivazione"}]},
+        blocks:[
+          {id:"PUH_B1",num:"BLOCCO 1",title:"Ancora — Bench Press",tag:"compound",objective:"Traccia questo carico: ancora Push per tutto l'anno",
+           exercises:[{id:"PUH_B1a",letter:"1",name:"Barbell Bench Press",sets:4,reps:"8-10",tut:"2s eccentrica",rest:"90s",note:null,anchor:true,anchorKey:"benchPress"}]},
+          {id:"PUH_B2",num:"BLOCCO 2",title:"SS Pump",tag:"superset",objective:"3 round · Rest 90s",
+           exercises:[
+             {id:"PUH_B2a",letter:"2A",name:"Incline DB Press",sets:3,reps:"10-12",tut:null,rest:"→ 2B",note:null},
+             {id:"PUH_B2b",letter:"2B",name:"Dips (parallele/panche)",sets:3,reps:"AMRAP-2",tut:null,rest:"90s",note:"Fermati 2 reps prima del cedimento"},
+           ]},
+          {id:"PUH_B3",num:"BLOCCO 3",title:"Overhead",tag:null,objective:"Ancora secondaria spalle",
+           exercises:[{id:"PUH_B3a",letter:"3",name:"Barbell/DB Overhead Press",sets:3,reps:"10-12",tut:null,rest:"90s",note:null,anchor:true,anchorKey:"ohp"}]},
+          {id:"PUH_B4",num:"BLOCCO 4",title:"TRI-SET Detail",tag:"triset",objective:"3 round · Rest 90s",
+           exercises:[
+             {id:"PUH_B4a",letter:"4A",name:"DB Lateral Raise",sets:3,reps:"12",tut:null,rest:"→ 4B",note:null},
+             {id:"PUH_B4b",letter:"4B",name:"DB Kickback",sets:3,reps:"12",tut:null,rest:"→ 4C",note:null},
+             {id:"PUH_B4c",letter:"4C",name:"Pike Push-up",sets:3,reps:"10",tut:null,rest:"90s",note:null},
+           ]},
+          {id:"PUH_HIIT",num:"⚡ HIIT",title:"SHIELD WALL — 4 Round For Time",tag:"hiit",objective:"Nota il tempo totale",
+           exercises:[
+             {id:"PUH_Ha",letter:"A",name:"KB Push Press",sets:4,reps:"10",tut:null,rest:"no",note:null},
+             {id:"PUH_Hb",letter:"B",name:"Jump Rope Double-Unders",sets:4,reps:"15 (o 30 singoli)",tut:null,rest:"no",note:null},
+             {id:"PUH_Hc",letter:"C",name:"Burpee",sets:4,reps:"8",tut:null,rest:"tra i round",note:null},
+           ]},
+        ]},
+      strength:{ duration:"~55 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"2'"},{name:"Scap activation",specs:"band/bodyweight"},{name:"Barra vuota Bench",specs:"2×8"}]},
+        blocks:[
+          {id:"PUS_B1",num:"BLOCCO 1",title:"Ancora — Top Set",tag:"compound",objective:"Build a top set poi Backoff · Rest 2-3 min",
+           exercises:[{id:"PUS_B1a",letter:"1",name:"Barbell Bench Press — Top Set + Backoff",sets:4,reps:"Top 3-5 + Backoff 3×5 @-10%",tut:null,rest:"2-3min",note:"RPE target secondo settimana del blocco",anchor:true,anchorKey:"benchPress"}]},
+          {id:"PUS_B2",num:"BLOCCO 2",title:"Ancora Secondaria",tag:"compound",objective:"Rest 2 min",
+           exercises:[{id:"PUS_B2a",letter:"2",name:"Barbell/DB Overhead Press",sets:4,reps:"5",tut:null,rest:"2min",note:null,anchor:true,anchorKey:"ohp"}]},
+          {id:"PUS_B3",num:"BLOCCO 3",title:"Accessorio Tricipiti/Petto",tag:null,objective:"Rest 90s",
+           exercises:[{id:"PUS_B3a",letter:"3",name:"Weighted Dips",sets:3,reps:"6-8",tut:null,rest:"90s",note:null}]},
+          {id:"PUS_B4",num:"BLOCCO 4",title:"Tricipiti Pesante",tag:null,objective:"Rest 90s",
+           exercises:[{id:"PUS_B4a",letter:"4",name:"Close Grip Bench / Floor Press",sets:3,reps:"8",tut:null,rest:"90s",note:"Floor press se niente rack"}]},
+          {id:"PUS_HIIT",num:"⚡ Finisher breve",title:"Recupero CNS — 3 round",tag:"hiit",objective:"Ritmo blando, non affaticare il CNS",
+           exercises:[
+             {id:"PUS_Ha",letter:"A",name:"KB Overhead Carry",sets:3,reps:"30s per lato",tut:null,rest:"no",note:null},
+             {id:"PUS_Hb",letter:"B",name:"Jump Rope leggero",sets:3,reps:"15 singoli",tut:null,rest:"tra i round",note:null},
+           ]},
+        ]},
+      conditioning:{ duration:"~50-52 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"3' leggero"},{name:"Mobilità spalle",specs:null}]},
+        blocks:[
+          {id:"PUC_B1",num:"BLOCCO PRINCIPALE",title:"Leggero — RPE 5-6",tag:null,objective:"~25 minuti totali",
+           exercises:[
+             {id:"PUC_B1a",letter:"1",name:"Barbell Bench Press",sets:3,reps:"10",tut:null,rest:"60s",note:"Carico leggero",anchor:true,anchorKey:"benchPress"},
+             {id:"PUC_B1b",letter:"2",name:"DB Incline Press",sets:3,reps:"12",tut:null,rest:"60s",note:"Carico leggero"},
+             {id:"PUC_B1c",letter:"3",name:"Push-up variazioni",sets:3,reps:"AMRAP-3",tut:null,rest:"60s",note:null},
+           ]},
+          {id:"PUC_HIIT",num:"⚡ HIIT",title:"VALHALLA GATES — EMOM 16'",tag:"hiit",objective:"Dispari: Thruster · Pari: Rope+Burpee",
+           exercises:[
+             {id:"PUC_Ha",letter:"dispari",name:"KB Thruster",sets:8,reps:"12",tut:null,rest:"EMOM",note:null},
+             {id:"PUC_Hb",letter:"pari",name:"Jump Rope + Burpee",sets:8,reps:"20+5",tut:null,rest:"EMOM",note:null},
+           ]},
+        ]},
+    },
+    Pull: {
+      emoji:"🔵", name:"Pull — Dorso/Bicipiti",
+      hypertrophy:{ duration:"~57 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"2'"},{name:"Band Pull-Apart",specs:"2×15"},{name:"Cat-Cow",specs:"10"},{name:"Scap Pull-up",specs:"2×8"}]},
+        blocks:[
+          {id:"PLH_B1",num:"BLOCCO 1",title:"Ancora — Deadlift",tag:"compound",objective:"Traccia questo carico: ancora Pull per tutto l'anno",
+           exercises:[{id:"PLH_B1a",letter:"1",name:"Barbell Deadlift",sets:3,reps:"6-8",tut:null,rest:"2min",note:"Tecnico-volume",anchor:true,anchorKey:"deadlift"}]},
+          {id:"PLH_B2",num:"BLOCCO 2",title:"SS Pulling",tag:"superset",objective:"4 round · Rest 90s",
+           exercises:[
+             {id:"PLH_B2a",letter:"2A",name:"Pull-Up (zavorrato o corpo libero)",sets:4,reps:"6-8",tut:null,rest:"→ 2B",note:null},
+             {id:"PLH_B2b",letter:"2B",name:"Barbell/DB Bent-Over Row",sets:4,reps:"10",tut:null,rest:"90s",note:null},
+           ]},
+          {id:"PLH_B3",num:"BLOCCO 3",title:"TRI-SET Detail",tag:"triset",objective:"3 round · Rest 90s",
+           exercises:[
+             {id:"PLH_B3a",letter:"3A",name:"DB Single Arm Row",sets:3,reps:"10 per lato",tut:null,rest:"→ 3B",note:null},
+             {id:"PLH_B3b",letter:"3B",name:"DB Reverse Fly",sets:3,reps:"12",tut:null,rest:"→ 3C",note:null},
+             {id:"PLH_B3c",letter:"3C",name:"Prone Superman Hold",sets:3,reps:"20s",tut:null,rest:"90s",note:null},
+           ]},
+          {id:"PLH_B4",num:"BLOCCO 4",title:"Bicipiti SS",tag:"superset",objective:"3 round · Rest 60s",
+           exercises:[
+             {id:"PLH_B4a",letter:"4A",name:"Barbell Curl",sets:3,reps:"10",tut:null,rest:"→ 4B",note:null},
+             {id:"PLH_B4b",letter:"4B",name:"DB Hammer Curl",sets:3,reps:"10",tut:null,rest:"60s",note:null},
+           ]},
+          {id:"PLH_HIIT",num:"⚡ HIIT",title:"OATH OF STEEL — 4 Round",tag:"hiit",objective:"Nota il tempo totale",
+           exercises:[
+             {id:"PLH_Ha",letter:"A",name:"KB Swing",sets:4,reps:"12",tut:null,rest:"no",note:null},
+             {id:"PLH_Hb",letter:"B",name:"Inverted Row (sotto rack)",sets:4,reps:"10",tut:null,rest:"no",note:null},
+             {id:"PLH_Hc",letter:"C",name:"Jump Rope",sets:4,reps:"20",tut:null,rest:"tra i round",note:null},
+           ]},
+        ]},
+      strength:{ duration:"~55 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"2'"},{name:"Scap activation",specs:null},{name:"Deadlift barra vuota",specs:"2×5"}]},
+        blocks:[
+          {id:"PLS_B1",num:"BLOCCO 1",title:"Ancora — Top Set",tag:"compound",objective:"Build a top set poi Backoff · Rest 2-3 min",
+           exercises:[{id:"PLS_B1a",letter:"1",name:"Barbell Deadlift — Top Set + Backoff",sets:4,reps:"Top 1-3 + Backoff 3×3",tut:null,rest:"2-3min",note:"RPE target secondo settimana",anchor:true,anchorKey:"deadlift"}]},
+          {id:"PLS_B2",num:"BLOCCO 2",title:"Ancora Secondaria",tag:"compound",objective:"Rest 2 min",
+           exercises:[{id:"PLS_B2a",letter:"2",name:"Weighted Pull-Up",sets:4,reps:"5",tut:null,rest:"2min",note:"Kg = zavorra aggiunta",anchor:true,anchorKey:"pullup",bodyweight:true}]},
+          {id:"PLS_B3",num:"BLOCCO 3",title:"Row Pesante",tag:null,objective:"Rest 90s",
+           exercises:[{id:"PLS_B3a",letter:"3",name:"Barbell Bent-Over Row",sets:4,reps:"6",tut:null,rest:"90s",note:null}]},
+          {id:"PLS_B4",num:"BLOCCO 4",title:"Bicipiti Pesante",tag:null,objective:"Rest 60s",
+           exercises:[{id:"PLS_B4a",letter:"4",name:"DB Curl pesante",sets:3,reps:"8",tut:null,rest:"60s",note:null}]},
+          {id:"PLS_HIIT",num:"⚡ Finisher breve",title:"Recupero CNS — 3 round",tag:"hiit",objective:"Ritmo blando",
+           exercises:[
+             {id:"PLS_Ha",letter:"A",name:"Farmer Carry KB pesante",sets:3,reps:"30s",tut:null,rest:"no",note:null},
+             {id:"PLS_Hb",letter:"B",name:"Jump Rope leggero",sets:3,reps:"15",tut:null,rest:"tra i round",note:null},
+           ]},
+        ]},
+      conditioning:{ duration:"~50-53 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"3' leggero"},{name:"Mobilità toracica",specs:null}]},
+        blocks:[
+          {id:"PLC_B1",num:"BLOCCO PRINCIPALE",title:"Leggero — RPE 5-6",tag:null,objective:"~25 minuti totali",
+           exercises:[
+             {id:"PLC_B1a",letter:"1",name:"Barbell Deadlift",sets:3,reps:"8",tut:null,rest:"60s",note:"Focus tecnica",anchor:true,anchorKey:"deadlift"},
+             {id:"PLC_B1b",letter:"2",name:"Pull-Up",sets:3,reps:"AMRAP-2",tut:null,rest:"60s",note:null},
+             {id:"PLC_B1c",letter:"3",name:"Barbell Row",sets:3,reps:"10",tut:null,rest:"60s",note:"Carico leggero"},
+           ]},
+          {id:"PLC_HIIT",num:"⚡ HIIT",title:"RAVEN'S CALL — AMRAP 18'",tag:"hiit",objective:"Ripeti il round finché il tempo non scade",
+           exercises:[
+             {id:"PLC_Ha",letter:"A",name:"KB Swing",sets:1,reps:"10",tut:null,rest:"AMRAP",note:null},
+             {id:"PLC_Hb",letter:"B",name:"Inverted Row",sets:1,reps:"8",tut:null,rest:"AMRAP",note:null},
+             {id:"PLC_Hc",letter:"C",name:"Jump Rope",sets:1,reps:"15",tut:null,rest:"AMRAP",note:null},
+             {id:"PLC_Hd",letter:"D",name:"Burpee",sets:1,reps:"5",tut:null,rest:"AMRAP",note:null},
+           ]},
+        ]},
+    },
+    Legs: {
+      emoji:"🟢", name:"Legs — Gambe/Core",
+      hypertrophy:{ duration:"~55 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"2'"},{name:"Leg Swing",specs:"10 per lato"},{name:"Hip Circle",specs:null},{name:"Bodyweight Squat",specs:"2×10"}]},
+        blocks:[
+          {id:"LEH_B1",num:"BLOCCO 1",title:"Ancora — Back Squat",tag:"compound",objective:"Traccia questo carico: ancora Legs per tutto l'anno",
+           exercises:[{id:"LEH_B1a",letter:"1",name:"Back Squat",sets:4,reps:"8-10",tut:"3s eccentrica",rest:"90s",note:null,anchor:true,anchorKey:"backSquat"}]},
+          {id:"LEH_B2",num:"BLOCCO 2",title:"SS Posterior/Anterior",tag:"superset",objective:"3 round · Rest 90s",
+           exercises:[
+             {id:"LEH_B2a",letter:"2A",name:"DB Bulgarian Split Squat",sets:3,reps:"10 per gamba",tut:null,rest:"→ 2B",note:null},
+             {id:"LEH_B2b",letter:"2B",name:"Barbell/DB Romanian Deadlift",sets:3,reps:"10",tut:null,rest:"90s",note:null},
+           ]},
+          {id:"LEH_B3",num:"BLOCCO 3",title:"TRI-SET Detail",tag:"triset",objective:"3 round · Rest 90s",
+           exercises:[
+             {id:"LEH_B3a",letter:"3A",name:"DB Walking Lunge",sets:3,reps:"20 passi",tut:null,rest:"→ 3B",note:null},
+             {id:"LEH_B3b",letter:"3B",name:"Barbell Hip Thrust",sets:3,reps:"12",tut:null,rest:"→ 3C",note:null},
+             {id:"LEH_B3c",letter:"3C",name:"Calf Raise (corpo libero/DB)",sets:3,reps:"20",tut:null,rest:"90s",note:null},
+           ]},
+          {id:"LEH_B4",num:"BLOCCO 4",title:"Core SS",tag:"superset",objective:"3 round · Rest 60s",
+           exercises:[
+             {id:"LEH_B4a",letter:"4A",name:"Hanging Leg Raise (sbarra)",sets:3,reps:"10-12",tut:null,rest:"→ 4B",note:null},
+             {id:"LEH_B4b",letter:"4B",name:"Plank",sets:3,reps:"30-45s",tut:null,rest:"60s",note:null},
+           ]},
+          {id:"LEH_HIIT",num:"⚡ HIIT",title:"GJALLARHORN — 4 Round",tag:"hiit",objective:"Nota il tempo totale",
+           exercises:[
+             {id:"LEH_Ha",letter:"A",name:"KB Goblet Squat",sets:4,reps:"15",tut:null,rest:"no",note:null},
+             {id:"LEH_Hb",letter:"B",name:"Jump Rope",sets:4,reps:"20",tut:null,rest:"no",note:null},
+             {id:"LEH_Hc",letter:"C",name:"Mountain Climber",sets:4,reps:"10 per lato",tut:null,rest:"tra i round",note:null},
+           ]},
+        ]},
+      strength:{ duration:"~55 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"2'"},{name:"Leg Swing",specs:null},{name:"Squat barra vuota",specs:"2×8"}]},
+        blocks:[
+          {id:"LES_B1",num:"BLOCCO 1",title:"Ancora — Top Set",tag:"compound",objective:"Build a top set poi Backoff · Rest 2-3 min",
+           exercises:[{id:"LES_B1a",letter:"1",name:"Back Squat — Top Set + Backoff",sets:4,reps:"Top 1-3 + Backoff 3×5",tut:null,rest:"2-3min",note:"RPE target secondo settimana",anchor:true,anchorKey:"backSquat"}]},
+          {id:"LES_B2",num:"BLOCCO 2",title:"Hinge Pesante",tag:null,objective:"Rest 2 min",
+           exercises:[{id:"LES_B2a",letter:"2",name:"Barbell Romanian Deadlift",sets:4,reps:"6",tut:null,rest:"2min",note:null}]},
+          {id:"LES_B3",num:"BLOCCO 3",title:"Unilaterale Pesante",tag:null,objective:"Rest 90s",
+           exercises:[{id:"LES_B3a",letter:"3",name:"DB Bulgarian Split Squat zavorrato",sets:3,reps:"8 per gamba",tut:null,rest:"90s",note:null}]},
+          {id:"LES_B4",num:"BLOCCO 4",title:"Core",tag:null,objective:"Rest 60s",
+           exercises:[{id:"LES_B4a",letter:"4",name:"Hanging Leg Raise",sets:3,reps:"10-12",tut:null,rest:"60s",note:null}]},
+          {id:"LES_HIIT",num:"⚡ Finisher breve",title:"Recupero CNS — 3 round",tag:"hiit",objective:"Ritmo blando",
+           exercises:[
+             {id:"LES_Ha",letter:"A",name:"KB Front Rack Hold",sets:3,reps:"30s",tut:null,rest:"no",note:null},
+             {id:"LES_Hb",letter:"B",name:"Jump Rope leggero",sets:3,reps:"15",tut:null,rest:"tra i round",note:null},
+           ]},
+        ]},
+      conditioning:{ duration:"~50-52 min",
+        warmup:{title:"Warm-Up",time:"5 min",exercises:[{name:"Jump Rope",specs:"3' leggero"},{name:"Mobilità anca/caviglia",specs:null}]},
+        blocks:[
+          {id:"LEC_B1",num:"BLOCCO PRINCIPALE",title:"Leggero — RPE 5-6",tag:null,objective:"~25 minuti totali",
+           exercises:[
+             {id:"LEC_B1a",letter:"1",name:"Back Squat",sets:3,reps:"10",tut:null,rest:"60s",note:"Carico leggero",anchor:true,anchorKey:"backSquat"},
+             {id:"LEC_B1b",letter:"2",name:"Walking Lunges",sets:3,reps:"12 per gamba",tut:null,rest:"60s",note:"Carico leggero"},
+             {id:"LEC_B1c",letter:"3",name:"Romanian Deadlift",sets:3,reps:"10",tut:null,rest:"60s",note:"Carico leggero"},
+           ]},
+          {id:"LEC_HIIT",num:"⚡ HIIT",title:"MIDGARD MARCH — Death By",tag:"hiit",objective:"Punteggio = ultimo minuto completato",
+           exercises:[
+             {id:"LEC_Ha",letter:"A",name:"KB Thruster (Death By)",sets:20,reps:"+1/min",tut:null,rest:"EMOM",note:null},
+             {id:"LEC_Hb",letter:"B",name:"Burpee (Death By)",sets:20,reps:"+1/min",tut:null,rest:"EMOM",note:null},
+           ]},
+        ]},
+    },
+  },
+  reserveSession:{
+    emoji:"⚪", name:"Sessione di Riserva — EINHERJAR", duration:"~50 min",
+    warmup:{title:"Warm-Up",time:"10 min",exercises:[{name:"Jump Rope",specs:"5'"},{name:"Mobilità generale",specs:"anche, spalle, colonna"}]},
+    blocks:[
+      {id:"RE_B1",num:"BLOCCO 1",title:"Punti Deboli / Accessori",tag:null,objective:"20 min · Ruota tra le 3 opzioni ad ogni utilizzo",
+       exercises:[
+         {id:"RE_B1a",letter:"Core",name:"Hanging Leg Raise",sets:3,reps:"12",tut:null,rest:"60s",note:"Opzione Core"},
+         {id:"RE_B1b",letter:"Core",name:"Pallof Press (banda/KB)",sets:3,reps:"10 per lato",tut:null,rest:"60s",note:"Opzione Core"},
+         {id:"RE_B1c",letter:"Braccia",name:"DB Concentration Curl",sets:3,reps:"10",tut:null,rest:"60s",note:"Opzione Braccia"},
+         {id:"RE_B1d",letter:"Braccia",name:"Close Grip Push-up",sets:3,reps:"AMRAP-2",tut:null,rest:"60s",note:"Opzione Braccia"},
+         {id:"RE_B1e",letter:"Mobilità",name:"Cossack Squat",sets:3,reps:"8 per lato",tut:null,rest:"60s",note:"Opzione Mobilità/Prehab"},
+         {id:"RE_B1f",letter:"Mobilità",name:"Reverse Fly DB (o Face Pull banda)",sets:3,reps:"15",tut:null,rest:"60s",note:"Opzione Mobilità/Prehab"},
+       ]},
+      {id:"RE_HIIT",num:"⚡ HIIT",title:"EINHERJAR — AMRAP 15'",tag:"hiit",objective:"Conta i round totali completati",
+       exercises:[
+         {id:"RE_Ha",letter:"A",name:"KB Swing",sets:1,reps:"10",tut:null,rest:"AMRAP",note:null},
+         {id:"RE_Hb",letter:"B",name:"Jump Rope",sets:1,reps:"10",tut:null,rest:"AMRAP",note:null},
+         {id:"RE_Hc",letter:"C",name:"Burpee",sets:1,reps:"5",tut:null,rest:"AMRAP",note:null},
+         {id:"RE_Hd",letter:"D",name:"Sit-up",sets:1,reps:"10",tut:null,rest:"AMRAP",note:null},
+       ]},
+    ]
+  },
+  notes: [
+    {h:"Filosofia",body:"Iron Saga dura tutto l'anno: rotazione Push→Pull→Legs che avanza ad ogni sessione completata, dentro un macrociclo da 12 settimane diviso in 3 blocchi da 4 (Hypertrophy → Strength → Conditioning/Deload), ripetuto indefinitamente."},
+    {h:"Equipaggiamento",rows:[["Richiesto","Rack, sbarra trazioni, corpo libero, bilanciere, manubri, kettlebell, jump rope"],["Filosofia","Mai dipendente da macchinari — funziona in ogni garage gym"]]},
+    {h:"Progressione — Hypertrophy (sett. 1-4)",rows:[["1","RPE 7 — stabilisci il carico"],["2","Stesso carico +1-2 reps o RPE 7.5"],["3","+2.5-5% carico — RPE 8"],["4","Volume di picco — RPE 8"]]},
+    {h:"Progressione — Strength (sett. 5-8)",rows:[["5","Top set RPE 7"],["6","Top set RPE 7.5-8"],["7","Top set RPE 8.5-9"],["8","Top set RPE 9 — riferimento del ciclo"]]},
+    {h:"Progressione — Conditioning/Deload (sett. 9-12)",rows:[["9-11","RPE 5-6, focus tecnica e conditioning"],["12","Vero deload — il minimo indispensabile"]]},
+    {h:"Fondamentali",rows:[["Back Squat","Ancora Legs"],["Bench Press","Ancora Push"],["Deadlift","Ancora Pull"],["Overhead Press","Ancora secondaria Push"],["Weighted Pull-Up","Ancora secondaria Pull"]]},
+    {h:"Note Importanti",body:"1. Tecnica prima del carico, specialmente sui top set Strength.\n2. RPE è soggettivo ma allenabile — nelle prime settimane tieni 1-2 reps di margine.\n3. Il jump rope nel warm-up non è opzionale.\n4. Il tetto è 60 minuti — se sfori, taglia il finisher per primo, mai i fondamentali.\n5. Un anno è lungo: il sistema accumula nel tempo, non nella singola sessione."},
   ]
 }
 
@@ -564,33 +893,73 @@ const PROGRAMS = {
 const STORAGE_KEY = 'buildingVikingsState';
 
 function defaultState() {
-  return { currentDay:1, completedDays:[], logs:{}, sessionLogs:{}, loads:{A:{},B:{},C:{},D:{},E:{},F:{},G:{}}, activeProgram:'building_vikings' };
+  return {
+    currentDay: 1,
+    completedDays: [],
+    logs: {},
+    sessionLogs: {},
+    loads: {},
+    activeProgram: 'iron_saga',
+    cyclicState: {
+      iron_saga: { rotationIndex: 0, week: 1, sessionNumber: 1, reserveCount: 0, reserveNoteIdx: 0 }
+    }
+  };
 }
 
 let state = defaultState();
-try { const s = localStorage.getItem(STORAGE_KEY); if(s) state = {...defaultState(),...JSON.parse(s)}; } catch(e){}
-if(!state.activeProgram) state.activeProgram = 'building_vikings';
-if(!state.loads) state.loads = {};
+try {
+  const s = localStorage.getItem(STORAGE_KEY);
+  if (s) {
+    const parsed = JSON.parse(s);
+    state = { ...defaultState(), ...parsed };
+    // backfill cyclicState if missing (legacy imports)
+    if (!state.cyclicState) state.cyclicState = defaultState().cyclicState;
+    if (!state.cyclicState.iron_saga) state.cyclicState.iron_saga = defaultState().cyclicState.iron_saga;
+  }
+} catch (e) {}
 
-function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){} }
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+function getProgram() { return PROGRAMS[state.activeProgram] || PROGRAMS['iron_saga']; }
+function getCyclicState() { return state.cyclicState.iron_saga; }
 
-function getProgram() { return PROGRAMS[state.activeProgram] || PROGRAMS['building_vikings']; }
+// ═══ CYCLIC ENGINE (Iron Saga) ═══
+
+function getPhaseForWeek(week) {
+  const weekInCycle = ((week - 1) % 12) + 1;
+  if (weekInCycle <= 4) return 'hypertrophy';
+  if (weekInCycle <= 8) return 'strength';
+  return 'conditioning';
+}
+function getWeekInCycle(week) { return ((week - 1) % 12) + 1; }
+
+function advanceRotation() {
+  const cs = getCyclicState();
+  cs.rotationIndex = (cs.rotationIndex + 1) % 3;
+  if (cs.rotationIndex === 0) cs.week += 1;
+  cs.sessionNumber += 1;
+}
+
+function epley1RM(kg, reps) {
+  if (!kg || !reps) return 0;
+  return Math.round(kg * (1 + reps / 30) * 10) / 10;
+}
 
 // ═══════════════════════════════════════════════════
 //  NAVIGATION
 // ═══════════════════════════════════════════════════
 
 let currentView = 'list';
+let currentFondamentale = null;
 
 function showPage(id) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.getElementById('nav-'+id).classList.add('active');
-  if(id==='dashboard') renderDashboard();
-  if(id==='workout' && currentView==='list') renderWorkoutList();
-  if(id==='progressi') renderProgressi();
-  if(id==='note') renderNote();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'workout' && currentView === 'list') renderWorkoutList();
+  if (id === 'progressi') renderProgressi();
+  if (id === 'note') renderNote();
 }
 
 // ═══════════════════════════════════════════════════
@@ -599,66 +968,127 @@ function showPage(id) {
 
 function renderDashboard() {
   const prog = getProgram();
+  document.getElementById('dash-title').textContent =
+    prog.type === 'cyclic' ? '🪓⚔️ IRON SAGA' : (state.activeProgram === 'building_vikings' ? '🪓 BUILDING VIKINGS' : '🏋️ IRON NOMAD');
   document.getElementById('dash-subtitle').textContent = prog.name.toUpperCase() + ' · WORKOUT TRACKER';
 
-  // Program selector
   const sel = document.getElementById('dash-program-selector');
   sel.innerHTML = `<div class="program-selector">
-    ${Object.entries(PROGRAMS).map(([k,p])=>`
-      <button class="prog-btn ${state.activeProgram===k?'active':''}" onclick="switchProgram('${k}')">${p.shortName} ${p.name}</button>
+    ${Object.entries(PROGRAMS).map(([k, p]) => `
+      <button class="prog-btn ${state.activeProgram === k ? 'active' : ''}" onclick="switchProgram('${k}')">${p.shortName}</button>
     `).join('')}
   </div>`;
 
-  // Stats
+  if (prog.type === 'cyclic') renderDashboardCyclic(prog);
+  else renderDashboardFinite(prog);
+}
+
+function renderDashboardFinite(prog) {
   const done = state.completedDays.length;
   const totalVol = calcTotalVolume();
-  const restDays = prog.schedule.filter(d=>d.session==='REST').length;
+  const restDays = prog.schedule.filter(d => d.session === 'REST').length;
   const trainDays = prog.days - restDays;
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card"><div class="stat-val">${done}</div><div class="stat-lbl">SESSIONI</div></div>
-    <div class="stat-card"><div class="stat-val">${state.currentDay}</div><div class="stat-lbl">GIORNO</div></div>
-    <div class="stat-card"><div class="stat-val">${Math.round(done/trainDays*100)}%</div><div class="stat-lbl">COMPLETATO</div></div>
-    <div class="stat-card"><div class="stat-val">${totalVol>0?Math.round(totalVol/1000)+'t':0}</div><div class="stat-lbl">VOLUME TOT</div></div>
+    <div class="stat-card"><div class="stat-val">${done}</div><div class="stat-lbl">Sessioni</div></div>
+    <div class="stat-card"><div class="stat-val">${state.currentDay}</div><div class="stat-lbl">Giorno</div></div>
+    <div class="stat-card"><div class="stat-val">${Math.round(done / trainDays * 100)}%</div><div class="stat-lbl">Completato</div></div>
+    <div class="stat-card"><div class="stat-val">${totalVol > 0 ? Math.round(totalVol / 1000) + 't' : 0}</div><div class="stat-lbl">Volume Tot</div></div>
   `;
 
-  // Dots
-  const dots = prog.schedule.map(d=>{
+  const dots = prog.schedule.map(d => {
     const isDone = state.completedDays.includes(d.day);
     const isCur = d.day === state.currentDay;
-    const isRest = d.session==='REST';
-    return `<div class="day-dot ${isDone?'done':''} ${isCur?'current':''} ${isRest?'rest':''}" title="${d.wave}" onclick="dotClick(${d.day})">${d.session==='REST'?'R':d.session}</div>`;
+    const isRest = d.session === 'REST';
+    return `<div class="day-dot ${isDone ? 'done' : ''} ${isCur ? 'current' : ''} ${isRest ? 'rest' : ''}" title="${d.wave}" onclick="dotClick(${d.day})">${d.session === 'REST' ? 'R' : d.session}</div>`;
   }).join('');
-  document.getElementById('dots-row').innerHTML = dots;
+  document.getElementById('progress-visual').innerHTML = `<div class="dots-row">${dots}</div>`;
 
-  // Suggested session
-  const cur = prog.schedule.find(d=>d.day===state.currentDay);
+  const cur = prog.schedule.find(d => d.day === state.currentDay);
   let sugHtml = '';
-  if(cur) {
-    if(cur.session==='REST') {
-      sugHtml = `<div class="card"><div class="card-title">OGGI — GIORNO ${cur.day}</div><p style="color:var(--text-secondary);font-size:13px;">🔴 REST — Recupero attivo facoltativo</p></div>`;
+  if (cur) {
+    if (cur.session === 'REST') {
+      sugHtml = `<div class="card"><div class="card-title">Oggi — Giorno ${cur.day}</div><p style="color:var(--text-secondary);font-size:13px;">🔴 REST — Recupero attivo facoltativo</p></div>`;
     } else {
       const sess = prog.sessions[cur.session];
       sugHtml = `<div class="session-card">
         <div><div class="session-label">${cur.session} — ${sess.emoji}</div><div class="session-name">${sess.name}</div><div style="font-size:10px;color:var(--text-dim);margin-top:4px;">${cur.wave}</div></div>
-        <button class="btn-primary" onclick="openWorkout('${cur.session}')">AVVIA</button>
+        <button class="btn-primary" onclick="openWorkout('${cur.session}')">Avvia</button>
       </div>`;
     }
   }
   document.getElementById('dash-suggested').innerHTML = sugHtml;
+  document.getElementById('dash-reserve').innerHTML = '';
+}
+
+function renderDashboardCyclic(prog) {
+  const cs = getCyclicState();
+  const phase = getPhaseForWeek(cs.week);
+  const weekInCycle = getWeekInCycle(cs.week);
+  const phaseInfo = prog.phaseInfo[phase];
+  const mainCompleted = cs.sessionNumber - 1;
+  const totalVol = calcTotalVolume();
+
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-val">${mainCompleted}</div><div class="stat-lbl">Sessioni</div></div>
+    <div class="stat-card"><div class="stat-val">${cs.week}</div><div class="stat-lbl">Settimana</div></div>
+    <div class="stat-card"><div class="stat-val">${weekInCycle}<span style="font-size:14px;color:var(--text-dim);">/12</span></div><div class="stat-lbl">Nel Ciclo</div></div>
+    <div class="stat-card"><div class="stat-val">${totalVol > 0 ? Math.round(totalVol / 1000) + 't' : 0}</div><div class="stat-lbl">Volume Tot</div></div>
+  `;
+
+  // Phase bar — 12 week segments colored by phase, current highlighted
+  const segs = Array.from({ length: 12 }, (_, i) => {
+    const w = i + 1;
+    let segPhase = 'hypertrophy';
+    if (w > 8) segPhase = 'conditioning'; else if (w > 4) segPhase = 'strength';
+    const isCurrent = w === weekInCycle;
+    return `<div class="phase-seg ${segPhase} ${isCurrent ? 'active-' + segPhase : ''}" title="Settimana ${w} — ${prog.phaseInfo[segPhase].label}"></div>`;
+  }).join('');
+
+  const rotHtml = prog.rotation.map((type, i) => {
+    const isActive = i === cs.rotationIndex;
+    const emoji = prog.sessions[type].emoji;
+    return `<div class="rot-pip ${isActive ? 'active' : ''}"><div class="rot-pip-dot">${emoji}</div><div class="rot-pip-lbl">${type}</div></div>`;
+  }).join('');
+
+  document.getElementById('progress-visual').innerHTML = `
+    <div class="phase-bar-wrap">
+      <div class="phase-bar">${segs}</div>
+      <div class="phase-labels">
+        <span class="${phase === 'hypertrophy' ? 'current' : ''}">🔨 Hypertrophy</span>
+        <span class="${phase === 'strength' ? 'current' : ''}">⚡ Strength</span>
+        <span class="${phase === 'conditioning' ? 'current' : ''}">🌊 Conditioning</span>
+      </div>
+    </div>
+    <div class="rotation-pips">${rotHtml}</div>
+  `;
+
+  const curType = prog.rotation[cs.rotationIndex];
+  const sess = prog.sessions[curType];
+  const variant = sess[phase];
+  document.getElementById('dash-suggested').innerHTML = `
+    <div class="session-card">
+      <div>
+        <div class="session-label">${sess.emoji} ${curType}</div>
+        <div class="session-name">${variant.duration}</div>
+        <div class="session-phase-tag ${phase}">${phaseInfo.emoji} ${phaseInfo.label} · Sett. ${weekInCycle}/12</div>
+      </div>
+      <button class="btn-primary" onclick="openCyclicWorkout('${curType}','${phase}')">Avvia</button>
+    </div>
+  `;
+
+  document.getElementById('dash-reserve').innerHTML = `
+    <button class="btn-reserve" onclick="openReserveWorkout()">⚪ Sessione di Riserva — Einherjar</button>
+  `;
 }
 
 function switchProgram(key) {
   state.activeProgram = key;
-  state.currentDay = 1;
+  if (PROGRAMS[key].type === 'finite') state.currentDay = 1;
   saveState();
   renderDashboard();
 }
 
-function dotClick(day) {
-  state.currentDay = day;
-  saveState();
-  renderDashboard();
-}
+function dotClick(day) { state.currentDay = day; saveState(); renderDashboard(); }
 
 // ═══════════════════════════════════════════════════
 //  WORKOUT LIST
@@ -667,13 +1097,33 @@ function dotClick(day) {
 function renderWorkoutList() {
   currentView = 'list';
   const prog = getProgram();
+
+  if (prog.type === 'cyclic') {
+    const cs = getCyclicState();
+    const phase = getPhaseForWeek(cs.week);
+    const html = `
+      <div class="page-header"><h1>⚔️ WORKOUT</h1><p>${prog.name.toUpperCase()} · FASE: ${prog.phaseInfo[phase].label.toUpperCase()}</p></div>
+      ${prog.rotation.map(type => {
+        const sess = prog.sessions[type];
+        const variant = sess[phase];
+        return `<div class="session-card">
+          <div><div class="session-label">${sess.emoji} ${type}</div><div class="session-name">${sess.name.split('—')[1] || ''}</div><div style="font-size:10px;color:var(--text-dim);margin-top:4px;">${variant.duration}</div></div>
+          <button class="btn-primary" onclick="openCyclicWorkout('${type}','${phase}')">Avvia</button>
+        </div>`;
+      }).join('')}
+      <button class="btn-reserve" style="margin-top:6px;" onclick="openReserveWorkout()">⚪ Sessione di Riserva — Einherjar</button>
+    `;
+    document.getElementById('workout-content').innerHTML = html;
+    return;
+  }
+
   const sessions = Object.entries(prog.sessions);
   const html = `
-    <div class="page-header"><h1>💪 WORKOUT</h1><p>${prog.name.toUpperCase()}</p></div>
-    ${sessions.map(([key,sess])=>`
+    <div class="page-header"><h1>⚔️ WORKOUT</h1><p>${prog.name.toUpperCase()}</p></div>
+    ${sessions.map(([key, sess]) => `
       <div class="session-card">
         <div><div class="session-label">${key} — ${sess.emoji}</div><div class="session-name">${sess.name}</div><div style="font-size:10px;color:var(--text-dim);margin-top:4px;">${sess.duration}</div></div>
-        <button class="btn-primary" onclick="openWorkout('${key}')">AVVIA</button>
+        <button class="btn-primary" onclick="openWorkout('${key}')">Avvia</button>
       </div>
     `).join('')}
   `;
@@ -681,7 +1131,7 @@ function renderWorkoutList() {
 }
 
 // ═══════════════════════════════════════════════════
-//  WORKOUT DETAIL
+//  WORKOUT DETAIL — finite programs
 // ═══════════════════════════════════════════════════
 
 function openWorkout(sessionKey) {
@@ -689,139 +1139,208 @@ function openWorkout(sessionKey) {
   showPage('workout');
   const prog = getProgram();
   const sess = prog.sessions[sessionKey];
+  const logKey = state.currentDay;
+  const prevLogKeyHint = state.currentDay - 1;
 
+  const cur = prog.schedule.find(d => d.day === state.currentDay);
+  const isCurrentSession = cur && cur.session === sessionKey;
+
+  renderWorkoutDetail({
+    title: `${sessionKey} — ${sess.emoji} ${sess.name}`,
+    subtitle: sess.duration,
+    warmup: sess.warmup,
+    blocks: sess.blocks,
+    logKey,
+    onComplete: isCurrentSession ? () => completeSession(sessionKey) : null,
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  WORKOUT DETAIL — cyclic program (Iron Saga)
+// ═══════════════════════════════════════════════════
+
+function openCyclicWorkout(type, phase) {
+  currentView = 'detail';
+  showPage('workout');
+  const prog = getProgram();
+  const sess = prog.sessions[type];
+  const variant = sess[phase];
+  const phaseInfo = prog.phaseInfo[phase];
+  const cs = getCyclicState();
+  const logKey = cs.sessionNumber;
+
+  renderWorkoutDetail({
+    title: `${sess.emoji} ${type} — ${phaseInfo.label}`,
+    subtitle: `${variant.duration} · Settimana ${getWeekInCycle(cs.week)}/12`,
+    warmup: variant.warmup,
+    blocks: variant.blocks,
+    logKey,
+    onComplete: () => completeCyclicSession(),
+  });
+}
+
+function openReserveWorkout() {
+  currentView = 'detail';
+  showPage('workout');
+  const prog = getProgram();
+  const rs = prog.reserveSession;
+  const cs = getCyclicState();
+  const logKey = 'reserve_' + (cs.reserveCount + 1);
+
+  renderWorkoutDetail({
+    title: `${rs.emoji} ${rs.name}`,
+    subtitle: rs.duration + ' · Riserva #' + (cs.reserveCount + 1),
+    warmup: rs.warmup,
+    blocks: rs.blocks,
+    logKey,
+    onComplete: () => completeReserveSession(),
+  });
+}
+
+function renderWorkoutDetail({ title, subtitle, warmup, blocks, logKey, onComplete }) {
   const warmupHtml = `<div class="warmup-section">
-    <div class="warmup-title">🔥 ${sess.warmup.title} · ${sess.warmup.time}</div>
-    ${sess.warmup.exercises.map(e=>`<div class="warmup-item"><strong>${e.name}</strong> — ${e.specs}</div>`).join('')}
+    <div class="warmup-title">🔥 ${warmup.title} · ${warmup.time}</div>
+    ${warmup.exercises.map(e => `<div class="warmup-item"><strong>${e.name}</strong>${e.specs ? ' — ' + e.specs : ''}</div>`).join('')}
   </div>`;
 
-  const blocksHtml = sess.blocks.map(block=>{
-    const isHiit = block.tag==='hiit';
+  const blocksHtml = blocks.map(block => {
+    const isHiit = block.tag === 'hiit';
     const tagHtml = block.tag && !isHiit ? `<span class="block-tag">${block.tag.toUpperCase()}</span>` : isHiit ? `<span class="hiit-badge">⚡ HIIT</span>` : '';
-    const exHtml = block.exercises.map(ex => renderExercise(ex, sessionKey)).join('');
+    const hiitNameHtml = isHiit ? `<div class="hiit-name">${block.title.split('—')[0].trim()}</div>` : '';
+    const objectiveText = isHiit ? (block.title.split('—')[1] || block.objective) : block.objective;
+    const exHtml = block.exercises.map(ex => renderExercise(ex, logKey)).join('');
     return `<div class="block-card">
       <div class="block-header" onclick="toggleBlock('${block.id}')">
-        <div><div class="block-num">${block.num}</div><div class="block-title">${block.title}</div></div>
+        <div><div class="block-num">${block.num}</div><div class="block-title">${isHiit ? '' : block.title}</div>${hiitNameHtml}</div>
         ${tagHtml}
       </div>
       <div class="block-body" id="block-${block.id}">
-        <div class="block-objective">${block.objective}</div>
+        <div class="block-objective">${objectiveText || ''}</div>
         ${exHtml}
       </div>
     </div>`;
   }).join('');
 
-  const cur = prog.schedule.find(d=>d.day===state.currentDay);
-  const isCurrentSession = cur && cur.session === sessionKey;
-
   document.getElementById('workout-content').innerHTML = `
-    <button class="back-btn" onclick="renderWorkoutList()">← TORNA ALLA LISTA</button>
+    <button class="back-btn" onclick="renderWorkoutList()">← Torna alla lista</button>
     <div class="page-header" style="margin-bottom:16px;">
-      <h1>${sessionKey} — ${sess.emoji} ${sess.name}</h1>
-      <p>${sess.duration}</p>
+      <h1 style="font-size:20px;">${title}</h1>
+      <p>${subtitle}</p>
     </div>
     ${warmupHtml}
     ${blocksHtml}
-    ${isCurrentSession ? `<div style="text-align:center;margin-top:20px;"><button class="btn-primary" onclick="completeSession('${sessionKey}')" style="font-size:14px;padding:14px 30px;">✓ SESSIONE COMPLETATA</button></div>` : ''}
-    <div style="height:20px;"></div>
+    ${onComplete ? `<div style="text-align:center;margin-top:22px;"><button class="btn-primary" id="complete-btn" style="font-size:13px;padding:15px 32px;">✓ Sessione Completata</button></div>` : ''}
+    <div style="height:24px;"></div>
   `;
+  if (onComplete) document.getElementById('complete-btn').addEventListener('click', onComplete);
+
+  window.__currentLogKey = logKey;
 }
 
-function renderExercise(ex, sessionKey) {
-  const setsArr = Array.from({length:ex.sets}, (_,i)=>i);
-  const prevLogs = getSetLog(ex.id, state.currentDay - 1);
+function renderExercise(ex, logKey) {
+  const setsArr = Array.from({ length: ex.sets }, (_, i) => i);
+  const prevLogs = getPrevLog(ex.id, logKey);
   const savedNote = getExNote(ex.id);
+  const anchorBadge = ex.anchor ? `<div class="anchor-badge">⚓ Ancora</div>` : '';
 
   const rows = setsArr.map((_, i) => {
-    const cur = getCurrentSetLog(ex.id, i);
+    const cur = getCurrentSetLog(ex.id, logKey, i);
     const prev = prevLogs && prevLogs[i];
     const prevText = prev ? `${prev.kg}×${prev.reps}` : '—';
     return `<tr>
-      <td class="set-num">${i+1}</td>
+      <td class="set-num">${i + 1}</td>
       <td class="prec-val">${prevText}</td>
-      <td><input type="number" class="set-input" placeholder="kg" value="${cur?cur.kg:''}" onchange="saveSet('${ex.id}',${i},'kg',this.value)" inputmode="decimal"></td>
-      <td><input type="number" class="set-input" placeholder="rep" value="${cur?cur.reps:''}" onchange="saveSet('${ex.id}',${i},'reps',this.value)" inputmode="numeric"></td>
-      <td><button class="done-btn ${cur&&cur.done?'checked':''}" onclick="toggleDone('${ex.id}',${i},this)">${cur&&cur.done?'✓':''}</button></td>
+      <td><input type="number" class="set-input" placeholder="kg" value="${cur ? cur.kg : ''}" onchange="saveSet('${ex.id}','${logKey}',${i},'kg',this.value)" inputmode="decimal"></td>
+      <td><input type="number" class="set-input" placeholder="rep" value="${cur ? cur.reps : ''}" onchange="saveSet('${ex.id}','${logKey}',${i},'reps',this.value)" inputmode="numeric"></td>
+      <td><button class="done-btn ${cur && cur.done ? 'checked' : ''}" onclick="toggleDone('${ex.id}','${logKey}',${i},this)">${cur && cur.done ? '✓' : ''}</button></td>
     </tr>`;
   }).join('');
 
   return `<div class="ex-block">
     <div class="ex-header">
-      <div><div class="ex-letter">${ex.letter}</div><div class="ex-name">${ex.name}</div></div>
-      <div style="text-align:right;font-size:10px;color:var(--text-dim);">${ex.sets} set × ${ex.reps}</div>
+      <div><div class="ex-letter">${ex.letter}</div><div class="ex-name">${ex.name}</div>${anchorBadge}</div>
+      <div style="text-align:right;font-size:10px;color:var(--text-dim);white-space:nowrap;">${ex.sets} set × ${ex.reps}</div>
     </div>
-    ${ex.tut ? `<div class="ex-meta">TUT: ${ex.tut} · Rest: ${ex.rest||'—'}</div>` : ex.rest ? `<div class="ex-meta">Rest: ${ex.rest}</div>` : ''}
+    ${ex.tut ? `<div class="ex-meta">TUT: ${ex.tut} · Rest: ${ex.rest || '—'}</div>` : ex.rest ? `<div class="ex-meta">Rest: ${ex.rest}</div>` : ''}
     ${ex.note ? `<div class="ex-note">${ex.note}</div>` : ''}
     <table class="set-table">
-      <thead><tr><th>SET</th><th>PREC.</th><th>KG</th><th>REP</th><th>✓</th></tr></thead>
+      <thead><tr><th>Set</th><th>Prec.</th><th>Kg</th><th>Rep</th><th>✓</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
     <textarea class="ex-notes-area" placeholder="Note libere..." oninput="autoResizeNote(this);saveExNote('${ex.id}',this.value)">${savedNote}</textarea>
   </div>`;
 }
 
-function toggleBlock(id) {
-  const el = document.getElementById('block-'+id);
-  el.classList.toggle('open');
-}
+function toggleBlock(id) { document.getElementById('block-' + id).classList.toggle('open'); }
 
 // ═══════════════════════════════════════════════════
 //  LOGGING
 // ═══════════════════════════════════════════════════
 
-function getSetLog(exId, day) {
-  if(!state.logs[exId]) return null;
-  return state.logs[exId][day] || null;
+function getPrevLog(exId, currentKey) {
+  if (!state.logs[exId]) return null;
+  const keys = Object.keys(state.logs[exId]).filter(k => k !== String(currentKey));
+  if (keys.length === 0) return null;
+  // numeric keys sort numerically, reserve_N keys sort by N; fall back to string compare
+  const sorted = keys.sort((a, b) => {
+    const na = parseFloat(a.replace('reserve_', '')), nb = parseFloat(b.replace('reserve_', ''));
+    return na - nb;
+  });
+  const lastKey = sorted[sorted.length - 1];
+  return state.logs[exId][lastKey] || null;
 }
 
-function getCurrentSetLog(exId, setIdx) {
-  const day = state.currentDay;
-  if(!state.logs[exId] || !state.logs[exId][day]) return null;
-  return state.logs[exId][day][setIdx] || null;
+function getCurrentSetLog(exId, logKey, setIdx) {
+  if (!state.logs[exId] || !state.logs[exId][logKey]) return null;
+  return state.logs[exId][logKey][setIdx] || null;
 }
 
-function saveSet(exId, setIdx, field, value) {
-  const day = state.currentDay;
-  if(!state.logs[exId]) state.logs[exId] = {};
-  if(!state.logs[exId][day]) state.logs[exId][day] = [];
-  if(!state.logs[exId][day][setIdx]) state.logs[exId][day][setIdx] = {};
-  state.logs[exId][day][setIdx][field] = field==='kg' ? parseFloat(value)||0 : parseInt(value)||0;
+function saveSet(exId, logKey, setIdx, field, value) {
+  if (!state.logs[exId]) state.logs[exId] = {};
+  if (!state.logs[exId][logKey]) state.logs[exId][logKey] = [];
+  if (!state.logs[exId][logKey][setIdx]) state.logs[exId][logKey][setIdx] = {};
+  state.logs[exId][logKey][setIdx][field] = field === 'kg' ? parseFloat(value) || 0 : parseInt(value) || 0;
   saveState();
 }
 
-function toggleDone(exId, setIdx, btn) {
-  const day = state.currentDay;
-  if(!state.logs[exId]) state.logs[exId] = {};
-  if(!state.logs[exId][day]) state.logs[exId][day] = [];
-  if(!state.logs[exId][day][setIdx]) state.logs[exId][day][setIdx] = {};
-  const cur = state.logs[exId][day][setIdx].done;
-  state.logs[exId][day][setIdx].done = !cur;
+function toggleDone(exId, logKey, setIdx, btn) {
+  if (!state.logs[exId]) state.logs[exId] = {};
+  if (!state.logs[exId][logKey]) state.logs[exId][logKey] = [];
+  if (!state.logs[exId][logKey][setIdx]) state.logs[exId][logKey][setIdx] = {};
+  const cur = state.logs[exId][logKey][setIdx].done;
+  state.logs[exId][logKey][setIdx].done = !cur;
   btn.classList.toggle('checked');
   btn.textContent = !cur ? '✓' : '';
   saveState();
 }
 
 function getExNote(exId) { return (state.sessionLogs && state.sessionLogs[exId]) || ''; }
-
-function saveExNote(exId, val) {
-  if(!state.sessionLogs) state.sessionLogs = {};
-  state.sessionLogs[exId] = val;
-  saveState();
-}
-
-function autoResizeNote(el) { el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+function saveExNote(exId, val) { if (!state.sessionLogs) state.sessionLogs = {}; state.sessionLogs[exId] = val; saveState(); }
+function autoResizeNote(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
 
 function completeSession(sessionKey) {
-  if(!state.completedDays.includes(state.currentDay)) {
-    state.completedDays.push(state.currentDay);
-  }
+  if (!state.completedDays.includes(state.currentDay)) state.completedDays.push(state.currentDay);
   const prog = getProgram();
-  const nextDay = prog.schedule.find(d=>d.day > state.currentDay);
-  if(nextDay) state.currentDay = nextDay.day;
-  else state.currentDay = prog.days + 1;
+  const nextDay = prog.schedule.find(d => d.day > state.currentDay);
+  state.currentDay = nextDay ? nextDay.day : prog.days + 1;
   saveState();
   showToast('✓ Sessione completata!');
-  setTimeout(()=>{ showPage('dashboard'); }, 800);
+  setTimeout(() => showPage('dashboard'), 800);
+}
+
+function completeCyclicSession() {
+  advanceRotation();
+  saveState();
+  showToast('✓ Sessione completata!');
+  setTimeout(() => showPage('dashboard'), 800);
+}
+
+function completeReserveSession() {
+  const cs = getCyclicState();
+  cs.reserveCount += 1;
+  saveState();
+  showToast('✓ Riserva completata!');
+  setTimeout(() => showPage('dashboard'), 800);
 }
 
 // ═══════════════════════════════════════════════════
@@ -829,34 +1348,139 @@ function completeSession(sessionKey) {
 // ═══════════════════════════════════════════════════
 
 function renderProgressi() {
-  const labels = state.completedDays.sort((a,b)=>a-b).map(d=>'Giorno '+d);
-  const volumes = state.completedDays.sort((a,b)=>a-b).map(day=>{
+  const prog = getProgram();
+  const fndWrap = document.getElementById('fondamentali-wrap');
+
+  if (prog.fondamentali && prog.fondamentali.length) {
+    fndWrap.style.display = 'block';
+    if (!currentFondamentale || !prog.fondamentali.find(f => (f.anchorKey || f.id) === currentFondamentale)) {
+      currentFondamentale = prog.fondamentali[0].anchorKey || prog.fondamentali[0].id;
+    }
+    document.getElementById('fnd-selector').innerHTML = prog.fondamentali.map(f => {
+      const key = f.anchorKey || f.id;
+      return `<button class="fnd-btn ${currentFondamentale === key ? 'active' : ''}" onclick="selectFondamentale('${key}')">${f.label}</button>`;
+    }).join('');
+    renderFondamentaleChart(prog);
+  } else {
+    fndWrap.style.display = 'none';
+  }
+
+  renderVolumeChart();
+  renderPhaseChart(prog);
+}
+
+function selectFondamentale(key) {
+  currentFondamentale = key;
+  renderProgressi();
+}
+
+function collectAnchorPoints(prog, anchorKey) {
+  // Gather all exercise IDs across the whole PROGRAMS tree that share this anchorKey (or plain id for finite programs)
+  const matchIds = new Set();
+  function scan(sessObj) {
+    for (const block of sessObj.blocks) {
+      for (const ex of block.exercises) {
+        const k = ex.anchorKey || ex.id;
+        if (k === anchorKey && (ex.anchor || ex.id === anchorKey)) matchIds.add(ex.id);
+      }
+    }
+  }
+  if (prog.type === 'cyclic') {
+    ['Push', 'Pull', 'Legs'].forEach(t => {
+      ['hypertrophy', 'strength', 'conditioning'].forEach(p => scan(prog.sessions[t][p]));
+    });
+  } else {
+    Object.values(prog.sessions).forEach(s => scan(s));
+  }
+
+  const points = [];
+  matchIds.forEach(exId => {
+    const exLogs = state.logs[exId];
+    if (!exLogs) return;
+    Object.entries(exLogs).forEach(([key, sets]) => {
+      if (!Array.isArray(sets)) return;
+      let best = 0;
+      sets.forEach(s => { if (s && s.done && s.kg && s.reps) { const e = epley1RM(s.kg, s.reps); if (e > best) best = e; } });
+      if (best > 0) {
+        const sortKey = parseFloat(String(key).replace('reserve_', '9999.'));
+        points.push({ key, sortKey, value: best });
+      }
+    });
+  });
+  points.sort((a, b) => a.sortKey - b.sortKey);
+  return points;
+}
+
+function renderFondamentaleChart(prog) {
+  const points = collectAnchorPoints(prog, currentFondamentale);
+  const labels = points.map((p, i) => 'S' + (i + 1));
+  const data = points.map(p => p.value);
+
+  Chart.getChart('chart-1rm')?.destroy();
+  new Chart(document.getElementById('chart-1rm'), {
+    type: 'line',
+    data: { labels, datasets: [{ label: '1RM stimato (kg)', data, borderColor: '#e0983f', backgroundColor: 'rgba(224,152,63,0.12)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#f4b559' }] },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#a89e8a', font: { family: 'Space Mono' } } } },
+      scales: { x: { ticks: { color: '#5c5648' }, grid: { color: 'rgba(42,39,50,0.5)' } }, y: { ticks: { color: '#5c5648' }, grid: { color: 'rgba(42,39,50,0.5)' } } }
+    }
+  });
+}
+
+function renderVolumeChart() {
+  const allDays = new Set();
+  Object.values(state.logs).forEach(exLogs => Object.keys(exLogs).forEach(k => allDays.add(k)));
+  const sortedDays = Array.from(allDays).sort((a, b) => {
+    const na = parseFloat(String(a).replace('reserve_', '9999.')), nb = parseFloat(String(b).replace('reserve_', '9999.'));
+    return na - nb;
+  });
+  const labels = sortedDays.map((d, i) => 'Sess. ' + (i + 1));
+  const volumes = sortedDays.map(day => {
     let vol = 0;
-    Object.entries(state.logs).forEach(([exId, exLogs])=>{
+    Object.values(state.logs).forEach(exLogs => {
       const sets = exLogs[day];
-      if(sets) sets.forEach(s=>{ if(s&&s.done) vol += (s.kg||0)*(s.reps||0); });
+      if (sets) sets.forEach(s => { if (s && s.done) vol += (s.kg || 0) * (s.reps || 0); });
     });
     return Math.round(vol);
   });
 
-  const prog = getProgram();
-  const phaseCounts = {};
-  state.completedDays.forEach(d=>{
-    const entry = prog.schedule.find(e=>e.day===d);
-    if(entry && entry.session!=='REST') { phaseCounts[entry.session] = (phaseCounts[entry.session]||0)+1; }
-  });
-
   Chart.getChart('chart-volume')?.destroy();
-  Chart.getChart('chart-phases')?.destroy();
-
   new Chart(document.getElementById('chart-volume'), {
-    type:'line', data:{ labels, datasets:[{label:'Volume (kg)',data:volumes,borderColor:'#d4880a',backgroundColor:'rgba(212,136,10,0.1)',fill:true,tension:0.3}]},
-    options:{responsive:true,plugins:{legend:{labels:{color:'#9a9080',font:{family:'Space Mono'}}}},scales:{x:{ticks:{color:'#5a5448'}},y:{ticks:{color:'#5a5448'}}}}
+    type: 'line',
+    data: { labels, datasets: [{ label: 'Volume (kg)', data: volumes, borderColor: '#c17a2e', backgroundColor: 'rgba(193,122,46,0.1)', fill: true, tension: 0.3 }] },
+    options: { responsive: true, plugins: { legend: { labels: { color: '#a89e8a', font: { family: 'Space Mono' } } } }, scales: { x: { ticks: { color: '#5c5648' }, grid: { color: 'rgba(42,39,50,0.5)' } }, y: { ticks: { color: '#5c5648' }, grid: { color: 'rgba(42,39,50,0.5)' } } } }
   });
+}
 
+function renderPhaseChart(prog) {
+  const phaseCounts = {};
+  if (prog.type === 'cyclic') {
+    // approximate by counting logged sessionNumbers mapped to phase via completed rotation history is not stored per-session;
+    // instead count distinct log-keys per exercise-type bucket using ID prefixes (PUH/PUS/PUC etc.)
+    const prefixMap = { PUH: 'hypertrophy', PLH: 'hypertrophy', LEH: 'hypertrophy', PUS: 'strength', PLS: 'strength', LES: 'strength', PUC: 'conditioning', PLC: 'conditioning', LEC: 'conditioning' };
+    const seenSessions = new Set();
+    Object.entries(state.logs).forEach(([exId, exLogs]) => {
+      const prefix = exId.split('_')[0];
+      const phase = prefixMap[prefix];
+      if (!phase) return;
+      Object.keys(exLogs).forEach(k => {
+        const uniqueKey = phase + '|' + k;
+        if (!seenSessions.has(uniqueKey)) { seenSessions.add(uniqueKey); phaseCounts[prog.phaseInfo[phase].label] = (phaseCounts[prog.phaseInfo[phase].label] || 0) + 1; }
+      });
+    });
+  } else {
+    state.completedDays.forEach(d => {
+      const entry = prog.schedule.find(e => e.day === d);
+      if (entry && entry.session !== 'REST') phaseCounts[entry.session] = (phaseCounts[entry.session] || 0) + 1;
+    });
+  }
+
+  Chart.getChart('chart-phases')?.destroy();
   new Chart(document.getElementById('chart-phases'), {
-    type:'bar', data:{ labels:Object.keys(phaseCounts), datasets:[{label:'Sessioni',data:Object.values(phaseCounts),backgroundColor:'rgba(212,136,10,0.7)',borderColor:'#d4880a',borderWidth:1}]},
-    options:{responsive:true,plugins:{legend:{labels:{color:'#9a9080'}}},scales:{x:{ticks:{color:'#5a5448'}},y:{ticks:{color:'#5a5448',stepSize:1}}}}
+    type: 'bar',
+    data: { labels: Object.keys(phaseCounts), datasets: [{ label: 'Sessioni', data: Object.values(phaseCounts), backgroundColor: 'rgba(193,122,46,0.65)', borderColor: '#c17a2e', borderWidth: 1, borderRadius: 4 }] },
+    options: { responsive: true, plugins: { legend: { labels: { color: '#a89e8a' } } }, scales: { x: { ticks: { color: '#5c5648' } }, y: { ticks: { color: '#5c5648', stepSize: 1 } } } }
   });
 }
 
@@ -866,11 +1490,11 @@ function renderProgressi() {
 
 function renderNote() {
   const prog = getProgram();
-  const html = prog.notes.map(section=>`
+  const html = prog.notes.map(section => `
     <div class="note-section">
       <div class="note-h2">${section.h}</div>
-      ${section.rows ? `<table class="note-table"><thead><tr><th>VOCE</th><th>DESCRIZIONE</th></tr></thead><tbody>
-        ${section.rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}
+      ${section.rows ? `<table class="note-table"><thead><tr><th>Voce</th><th>Descrizione</th></tr></thead><tbody>
+        ${section.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}
       </tbody></table>` : ''}
       ${section.body ? `<div class="note-text" style="white-space:pre-line;">${section.body}</div>` : ''}
     </div>
@@ -884,22 +1508,24 @@ function renderNote() {
 
 function importData(input) {
   const file = input.files[0];
-  if(!file) return;
+  if (!file) return;
   const reader = new FileReader();
   const fb = document.getElementById('import-feedback');
   reader.onload = e => {
     try {
       let parsed = JSON.parse(e.target.result);
-      if(parsed.data) parsed = parsed.data;
-      const sessions = Object.keys(parsed.logs||{}).length;
-      state = {...defaultState(), ...parsed};
-      if(!state.activeProgram) state.activeProgram = 'building_vikings';
+      if (parsed.data) parsed = parsed.data;
+      const sessions = Object.keys(parsed.logs || {}).length;
+      state = { ...defaultState(), ...parsed };
+      if (!state.cyclicState) state.cyclicState = defaultState().cyclicState;
+      if (!state.cyclicState.iron_saga) state.cyclicState.iron_saga = defaultState().cyclicState.iron_saga;
+      if (!state.activeProgram || !PROGRAMS[state.activeProgram]) state.activeProgram = 'building_vikings';
       saveState();
-      fb.className='import-feedback ok';
+      fb.className = 'import-feedback ok';
       fb.textContent = `✓ Importato correttamente — ${sessions} esercizi con log`;
       renderDashboard();
-    } catch(err) {
-      fb.className='import-feedback err';
+    } catch (err) {
+      fb.className = 'import-feedback err';
       fb.textContent = '✗ File non valido — verifica il formato JSON';
     }
   };
@@ -911,6 +1537,7 @@ function resetProgress() {
   state.logs = {};
   state.sessionLogs = {};
   state.currentDay = 1;
+  state.cyclicState = defaultState().cyclicState;
   saveState();
   showToast('✓ Progressi azzerati');
   renderDashboard();
@@ -926,10 +1553,10 @@ function resetAll() {
 
 function exportData() {
   const prog = getProgram();
-  const blob = new Blob([JSON.stringify({program:prog.name, exportDate:today(), data:state},null,2)],{type:'application/json'});
+  const blob = new Blob([JSON.stringify({ program: prog.name, exportDate: today(), data: state }, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'bv_'+today()+'.json';
+  a.download = 'iron_saga_' + today() + '.json';
   a.click();
   showToast('✓ Dati esportati');
 }
@@ -942,9 +1569,9 @@ function today() { return new Date().toISOString().split('T')[0]; }
 
 function calcTotalVolume() {
   let total = 0;
-  Object.values(state.logs).forEach(exLogs=>{
-    Object.values(exLogs).forEach(daySets=>{
-      if(Array.isArray(daySets)) daySets.forEach(s=>{ if(s&&s.done) total += (s.kg||0)*(s.reps||0); });
+  Object.values(state.logs).forEach(exLogs => {
+    Object.values(exLogs).forEach(daySets => {
+      if (Array.isArray(daySets)) daySets.forEach(s => { if (s && s.done) total += (s.kg || 0) * (s.reps || 0); });
     });
   });
   return total;
@@ -954,7 +1581,7 @@ function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),3000);
+  setTimeout(() => el.classList.remove('show'), 3000);
 }
 
 // ═══════════════════════════════════════════════════
