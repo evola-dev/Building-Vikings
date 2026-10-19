@@ -644,6 +644,137 @@ const PROGRAMS = {
     {h:"Benchmark HIIT",rows:[["Grasshopper","Tempo totale 5 round (lower=meglio)"],["Thor's Hammer","EMOM 20min"],["Odin's Wrath","Reps totali (higher=meglio)"],["Ragnarök","Ultimo minuto completato (higher=meglio)"]]},
   ]
 },
+"dad_edition": {
+  name: "Building Vikings — Dad Edition", shortName: "👨 DAD", title: "👨🪓 DAD EDITION", type:"finite", days: 18,
+  schedule: [
+    {day:1,session:"A",wave:"Ondata 1"},{day:2,session:"B",wave:"Ondata 1"},{day:3,session:"C",wave:"Ondata 1"},
+    {day:4,session:"A",wave:"Ondata 1"},{day:5,session:"B",wave:"Ondata 1"},{day:6,session:"C",wave:"Ondata 1"},
+    {day:7,session:"A",wave:"Ondata 2 +5%"},{day:8,session:"B",wave:"Ondata 2 +5%"},{day:9,session:"C",wave:"Ondata 2 +5%"},
+    {day:10,session:"A",wave:"Ondata 2 +5%"},{day:11,session:"B",wave:"Ondata 2 +5%"},{day:12,session:"C",wave:"Ondata 2 +5%"},
+    {day:13,session:"A",wave:"Peak +5%"},{day:14,session:"B",wave:"Peak +5%"},{day:15,session:"C",wave:"Peak +5%"},
+    {day:16,session:"A",wave:"Scarico −20%"},{day:17,session:"B",wave:"Scarico −20%"},{day:18,session:"C",wave:"Scarico −20%"},
+  ],
+  fondamentali:[
+    {label:"Back Squat", id:"PA1a"},
+    {label:"Incline DB Press", id:"PA2a"},
+    {label:"Stiff Leg RDL", id:"PB1a"},
+    {label:"DB Overhead Press", id:"PB1b"},
+  ],
+  sessions: {
+    A: { name:"Squat & Spinta", emoji:"🏋️", duration:"max 45 min",
+      warmup:{title:"Warm-Up — Circuito + Attivazione",time:"5 min",exercises:[
+        {name:"Circuito RPE 5",specs:"3 round da 20s: Jumping Jack · KB Swing leggeri · Squat a corpo libero (≈3 min)"},
+        {name:"Goblet Squat con KB",specs:"1×8, 2s hold al bottom"},{name:"Banded Pull-Apart",specs:"1×10"},{name:"Push-up lenti",specs:"1×8"},
+      ]},
+      blocks:[
+        {id:"PA1",num:"BLOCCO 1",title:"Squat + Trazione — SS",tag:"superset",objective:"4 round · Rest 60s dopo la coppia · ≈10 min",
+         exercises:[
+           {id:"PA1a",letter:"1A",name:"Barbell Back Squat (o Safety Bar)",sets:4,reps:"8",tut:"4s neg + 1s hold bottom",rest:"→ 1B",note:"RPE 7–8 · Ondata 1: 8RM tecnico → Ondata 2 +5% → Peak +5%",anchor:true},
+           {id:"PA1b",letter:"1B",name:"Wide Grip Pull-Up",sets:4,reps:"AMRAP (6–10)",tut:"3s negative",rest:"60s",note:"Elastico se serve per tenere la negativa. Oltre 10 reps con 3s neg → zavorra"},
+         ]},
+        {id:"PA2",num:"BLOCCO 2",title:"Petto + Dorso — SS",tag:"superset",objective:"3 round · Rest 60s dopo la coppia · ≈8 min",
+         exercises:[
+           {id:"PA2a",letter:"2A",name:"Incline DB Press — Mini-Anarchy",sets:3,reps:"15 / 8 half+full / 10+DS",tut:"vedi note",rest:"→ 2B",note:"R1: 15 reps leggeri 3s neg · R2: 8 reps half rep dal bottom + full (=1 rep) · R3: 10 pesanti → DS −30% ×10. Registra il carico del round 3",anchor:true},
+           {id:"PA2b",letter:"2B",name:"Chest-Supported DB Row (panca inclinata)",sets:3,reps:"10",tut:"2s hold al picco",rest:"60s",note:"Petto appoggiato alla panca inclinata, gomiti lungo i fianchi"},
+         ]},
+        {id:"PA3",num:"BLOCCO 3",title:"Gambe / Spalle / Tricipiti — TRI-SET",tag:"triset",objective:"3 round · Rest 60s dopo il terzo esercizio · ≈9 min",
+         exercises:[
+           {id:"PA3a",letter:"3A",name:"Goblet Squat con KB — 4-4-4",sets:3,reps:"12 totali",tut:"4×3s neg + 4×2s hold + 4 reg",rest:"→ 3B",note:"Opzionale: talloni rialzati su un disco per più focus sul quadricipite"},
+           {id:"PA3b",letter:"3B",name:"DB Side Lateral Raise",sets:3,reps:"12",tut:"3s negative",rest:"→ 3C",note:null},
+           {id:"PA3c",letter:"3C",name:"DB Skull Crusher",sets:3,reps:"12",tut:"3s negative",rest:"60s",note:"Su panca, gomiti fermi"},
+         ]},
+        {id:"PA4",num:"BLOCCO 4",title:"Closer Bicipiti (bonus)",tag:null,objective:"Salta se sei oltre i 38 min · ≈4 min",
+         exercises:[
+           {id:"PA4a",letter:"4",name:"EZ Bar Spider Curl",sets:3,reps:"10",tut:"3s negative",rest:"45s",note:null},
+         ]},
+      ]},
+    B: { name:"Stacco & Trazione", emoji:"🔩", duration:"max 45 min",
+      warmup:{title:"Warm-Up — Circuito + Catena Posteriore",time:"5 min",exercises:[
+        {name:"Circuito RPE 5",specs:"3 round da 20s: Jumping Jack · KB Swing leggeri · Squat a corpo libero (≈3 min)"},
+        {name:"Banded Pull-Through",specs:"1×10 — attivazione gluti"},{name:"Good Morning a vuoto",specs:"1×8, 3s eccentrica"},{name:"Shoulder CARs",specs:"1×5 per lato"},
+      ]},
+      blocks:[
+        {id:"PB1",num:"BLOCCO 1",title:"Hinge + Spinta Verticale — SS",tag:"superset",objective:"4 round · Rest 60s dopo la coppia · ≈10 min",
+         exercises:[
+           {id:"PB1a",letter:"1A",name:"Stiff Leg RDL con Bilanciere",sets:4,reps:"8",tut:"3s eccentrica",rest:"→ 1B",note:"Schiena neutra, stretch degli ischiocrurali · RPE 7–8 · Ondata 1: 8RM tecnico → +5% → +5%",anchor:true},
+           {id:"PB1b",letter:"1B",name:"DB Overhead Press",sets:4,reps:"10",tut:"3s negative",rest:"60s",note:"Seduto o in piedi",anchor:true},
+         ]},
+        {id:"PB2",num:"BLOCCO 2",title:"Dorso — SS",tag:"superset",objective:"3 round · Rest 60s dopo la coppia · ≈8 min",
+         exercises:[
+           {id:"PB2a",letter:"2A",name:"Chin-Up (presa supina) — 3-3-3",sets:3,reps:"9 totali",tut:"3×3s neg + 3×3s hold top + 3 reg",rest:"→ 2B",note:"Mento sopra la sbarra per l'hold. Elastico di assistenza se serve; quando sono tutte pulite, aggiungi zavorra"},
+           {id:"PB2b",letter:"2B",name:"T-Bar Row",sets:3,reps:"12",tut:null,rest:"60s",note:"Carico moderato — pump. Se manca il T-Bar: Landmine Row o Barbell Bent-Over Row"},
+         ]},
+        {id:"PB3",num:"BLOCCO 3",title:"Petto — SS",tag:"superset",objective:"3 round · Rest 60s dopo la coppia · ≈7 min",
+         exercises:[
+           {id:"PB3a",letter:"3A",name:"Neutral Grip DB Bench Press",sets:3,reps:"10",tut:"3s negative",rest:"→ 3B",note:"Manubri paralleli"},
+           {id:"PB3b",letter:"3B",name:"Dips",sets:3,reps:"AMRAP",tut:"stop 1–2 reps dal cedimento",rest:"60s",note:"Non collassare al bottom"},
+         ]},
+        {id:"PB4",num:"BLOCCO 4",title:"Finisher Metabolico (bonus)",tag:"superset",objective:"3 round · Rest 45s · Salta se sei oltre i 38 min · ≈5 min",
+         exercises:[
+           {id:"PB4a",letter:"A",name:"KB Swing pesanti",sets:3,reps:"15",tut:null,rest:"→ B",note:null},
+           {id:"PB4b",letter:"B",name:"Burpee",sets:3,reps:"8",tut:null,rest:"45s",note:"Ritmo sostenuto, tecnica pulita"},
+         ]},
+      ]},
+    C: { name:"Affondo & Pump", emoji:"🔥", duration:"max 45 min",
+      warmup:{title:"Warm-Up — Circuito + Anche",time:"5 min",exercises:[
+        {name:"Circuito RPE 5",specs:"3 round da 20s: Jumping Jack · KB Swing leggeri · Squat a corpo libero (≈3 min)"},
+        {name:"Hip Circle + Leg Swing",specs:"1×6 per lato"},{name:"Goblet Squat con KB",specs:"1×8, 2s hold al bottom"},{name:"Banded Pull-Apart",specs:"1×10"},
+      ]},
+      blocks:[
+        {id:"PC1",num:"BLOCCO 1",title:"Unilaterale + Glutei — SS",tag:"superset",objective:"3 round · Rest 60s dopo la coppia · ≈9 min",
+         exercises:[
+           {id:"PC1a",letter:"1A",name:"Bulgarian Split Squat con Manubri",sets:3,reps:"8 per gamba",tut:"3s eccentrica",rest:"→ 1B",note:"Round 3 = Death Set: DS −20% ×8 immediato per gamba"},
+           {id:"PC1b",letter:"1B",name:"Dumbbell Glute Bridge",sets:3,reps:"12",tut:"2s hold al top",rest:"60s",note:"Manubrio pesante sul bacino, piedi a terra o su panca. Se diventa leggero, passa alla versione a una gamba"},
+         ]},
+        {id:"PC2",num:"BLOCCO 2",title:"Petto / Dorso / Spalle Post. — TRI-SET",tag:"triset",objective:"3 round · Rest 60s dopo il terzo esercizio · ≈9 min",
+         exercises:[
+           {id:"PC2a",letter:"2A",name:"Flat Dumbbell Fly",sets:3,reps:"10",tut:"3s eccentrica",rest:"→ 2B",note:"ROM completa"},
+           {id:"PC2b",letter:"2B",name:"Dumbbell Bent-Over Row (presa supina)",sets:3,reps:"10",tut:"2s hold al picco",rest:"→ 2C",note:"Gomiti lungo i fianchi"},
+           {id:"PC2c",letter:"2C",name:"DB Bent-Over Lateral Raise",sets:3,reps:"12",tut:"2s hold al top",rest:"60s",note:null},
+         ]},
+        {id:"PC3",num:"BLOCCO 3",title:"Braccia Pump — SS",tag:"superset",objective:"3 round · Rest 60s dopo la coppia · ≈8 min",
+         exercises:[
+           {id:"PC3a",letter:"3A",name:"Overhead DB Triceps Extension",sets:3,reps:"15/12/10+DS",tut:null,rest:"→ 3B",note:"Round 3: DS −30% ×10 (manubrio più leggero)"},
+           {id:"PC3b",letter:"3B",name:"EZ Bar Spider Curl",sets:3,reps:"15/12/10+DS",tut:null,rest:"60s",note:"Round 3: DS −30% ×10"},
+         ]},
+        {id:"PC4",num:"BLOCCO 4",title:"Closer Braccia (bonus)",tag:"superset",objective:"2 round · Rest 45s · Salta se sei oltre i 38 min · ≈4 min",
+         exercises:[
+           {id:"PC4a",letter:"A",name:"Double Contraction Dips",sets:2,reps:"8",tut:"3s negative",rest:"→ B",note:"Mezza risalita → full rep = 1 rep"},
+           {id:"PC4b",letter:"B",name:"Cheat Curl con Bilanciere",sets:2,reps:"8",tut:"3s negative",rest:"45s",note:"Leggero slancio in salita, discesa controllata"},
+         ]},
+      ]},
+  },
+  notes: [
+    {h:"Fasi (18 sessioni = 6 settimane)",rows:[
+      ["Sett. 1–2 · S1–S6","Ondata 1 — stabilisci i carichi di riferimento"],
+      ["Sett. 3–4 · S7–S12","Ondata 2 — compound +5%, isolamento +1 rep o +1s TUT"],
+      ["Sett. 5 · S13–S15","Peak — compound +5% (o RPE max 8.5)"],
+      ["Sett. 6 · S16–S18","Scarico — carichi −20%, 1 round in meno, RPE 6"],
+    ]},
+    {h:"Legenda Tecniche",rows:[
+      ["TUT","Time Under Tension"],["3s-neg","3 secondi di eccentrica"],["hold","Pausa isometrica"],
+      ["SS","Superset (transizione max 10s)"],["TRI","Tri-Set"],["DS","Drop Set -20/30%"],
+      ["4-4-4","12 reps: 4 neg 3s + 4 hold + 4 regolari"],["3-3-3","9 reps: 3 neg 3s + 3 hold + 3 regolari (chin-up)"],
+      ["Mini-Anarchy","Anarchy (Lipson) compressa in 3 round"],["RPE","Scala 1-10 · RPE 8 = ne hai ancora 2"],["AMRAP","As Many Reps As Possible (cedimento tecnico)"],
+    ]},
+    {h:"Autoregolazione",rows:[
+      ["Notte difficile (<5–6h)","RPE max 7, 1 round in meno per blocco"],
+      ["Solo 30 minuti","Piano B: warm-up 3' + Blocco 1 + Blocco 2"],
+      ["Solo 20 minuti","Minimo Vichingo: solo Blocco 1"],
+      ["Oltre i 38 minuti","Salta il Blocco 4 (bonus)"],
+      ["Sessione saltata","Non recuperarla: riprendi dalla successiva in elenco"],
+    ]},
+    {h:"Attrezzatura (zero macchine)",rows:[
+      ["Bilanciere + rack","Back Squat (o Safety Bar), Stiff Leg RDL, Cheat Curl"],
+      ["Panca regolabile","DB Press, Chest-Supported Row, Skull Crusher, Fly, Spider Curl"],
+      ["Manubri + Kettlebell","Quasi tutto · Goblet Squat, KB Swing"],
+      ["Sbarra + Parallele","Pull-Up, Chin-Up, Dips"],
+      ["EZ Bar · Elastici","Spider Curl · Pull-Apart, Pull-Through, assistenza"],
+    ]},
+    {h:"Note Importanti",body:"1. Tecnica prima del carico.\n2. Il warm-up da 5 minuti non è opzionale.\n3. RPE 8 = ne avresti ancora 2 nel serbatoio.\n4. Il Blocco 4 è il bonus: salta il Blocco 4, mai i blocchi 1–3.\n5. Il ciclo avanza per numero di sessione, non per data.\n6. La costanza batte l'intensità."},
+  ]
+},
+
 "iron_saga": {
   name: "Iron Saga", shortName: "⚔️ IS", type:"cyclic",
   rotation:["Push","Pull","Legs"],
@@ -900,6 +1031,7 @@ function defaultState() {
     sessionLogs: {},
     loads: {},
     activeProgram: 'iron_saga',
+    progressByProgram: null,
     cyclicState: {
       iron_saga: { rotationIndex: 0, week: 1, sessionNumber: 1, reserveCount: 0, reserveNoteIdx: 0 }
     }
@@ -969,7 +1101,7 @@ function showPage(id) {
 function renderDashboard() {
   const prog = getProgram();
   document.getElementById('dash-title').textContent =
-    prog.type === 'cyclic' ? '🪓⚔️ IRON SAGA' : (state.activeProgram === 'building_vikings' ? '🪓 BUILDING VIKINGS' : '🏋️ IRON NOMAD');
+    prog.type === 'cyclic' ? '🪓⚔️ IRON SAGA' : (prog.title || (state.activeProgram === 'building_vikings' ? '🪓 BUILDING VIKINGS' : '🏋️ IRON NOMAD'));
   document.getElementById('dash-subtitle').textContent = prog.name.toUpperCase() + ' · WORKOUT TRACKER';
 
   const sel = document.getElementById('dash-program-selector');
@@ -1081,9 +1213,29 @@ function renderDashboardCyclic(prog) {
   `;
 }
 
+// Ogni programma finito ha i propri giorni completati e il proprio giorno corrente.
+// I dati legacy (condivisi) vengono assegnati al programma attivo al primo cambio (o a Building Vikings se attivo era ciclico).
+function ensureProgressMap() {
+  if (state.progressByProgram) return;
+  state.progressByProgram = {};
+  const owner = (PROGRAMS[state.activeProgram] && PROGRAMS[state.activeProgram].type === 'finite') ? state.activeProgram : 'building_vikings';
+  state.progressByProgram[owner] = { currentDay: state.currentDay || 1, completedDays: (state.completedDays || []).slice() };
+}
+
 function switchProgram(key) {
+  const old = state.activeProgram;
+  if (old !== key) {
+    ensureProgressMap();
+    if (PROGRAMS[old] && PROGRAMS[old].type === 'finite') {
+      state.progressByProgram[old] = { currentDay: state.currentDay, completedDays: (state.completedDays || []).slice() };
+    }
+    if (PROGRAMS[key].type === 'finite') {
+      const p = state.progressByProgram[key];
+      state.currentDay = p ? p.currentDay : 1;
+      state.completedDays = p ? p.completedDays.slice() : [];
+    }
+  }
   state.activeProgram = key;
-  if (PROGRAMS[key].type === 'finite') state.currentDay = 1;
   saveState();
   renderDashboard();
 }
@@ -1534,6 +1686,7 @@ function importData(input) {
 
 function resetProgress() {
   state.completedDays = [];
+  state.progressByProgram = {};
   state.logs = {};
   state.sessionLogs = {};
   state.currentDay = 1;
